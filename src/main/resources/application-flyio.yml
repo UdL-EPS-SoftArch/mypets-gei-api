@@ -1,0 +1,9 @@
+allowed-origins: "https://mypets-gei.fly.dev, https://deploy-preview-*--mypets-gei.fly.dev"
+
+logging:
+    level:
+        org:
+            hibernate: error
+            springframework.core: error
+            springframework.web: error
+        root: error
