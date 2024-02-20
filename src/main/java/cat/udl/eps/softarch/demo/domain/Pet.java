@@ -1,7 +1,10 @@
 package cat.udl.eps.softarch.demo.domain;
 
-public class Pet {
-    int id;
+import jakarta.persistence.Id;
+
+public class Pet extends UriEntity<Long> {
+    @Id
+    Long id;
     String name;
     boolean isAdopted;
     String color;
@@ -10,4 +13,9 @@ public class Pet {
     String age;
     String description;
     String breed;
+
+    @Override
+    public Long getId() {
+        return id;
+    }
 }
