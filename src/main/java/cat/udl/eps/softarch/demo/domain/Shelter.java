@@ -9,7 +9,7 @@ import jakarta.validation.constraints.PastOrPresent;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 
 @Entity
 @Table(name = "Shelter")
@@ -19,7 +19,7 @@ public class Shelter extends UriEntity<Long> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Long id;
 
     @NotBlank
     private String name;
@@ -35,10 +35,10 @@ public class Shelter extends UriEntity<Long> {
 
     @PastOrPresent
     @NotNull
-    private LocalDateTime createdAt;
+    private ZonedDateTime createdAt;
 
     @PastOrPresent
-    private LocalDateTime updatedAt;
+    private ZonedDateTime updatedAt;
 
     @NotNull
     private boolean isActive;
