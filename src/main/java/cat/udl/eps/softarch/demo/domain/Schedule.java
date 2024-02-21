@@ -30,4 +30,8 @@ public class Schedule extends UriEntity<Long> {
     public LocalDateTime getEnd() {
         return end;
     }
+
+    public Integer getId() {
+        return id;
+    }
 }
