@@ -3,10 +3,13 @@ package cat.udl.eps.softarch.demo.domain;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PastOrPresent;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "Shelter")
@@ -29,18 +32,6 @@ public class Shelter extends UriEntity<Long> {
     @NotBlank
     @Column(unique = true)
     private String mobile;
-
-    public String getEmail() {
-        return email;
-    }
-
-    public Integer getId() {
-        return id;
-    }
-
-    public String getMobile() {
-        return mobile;
-    }
 
     @PastOrPresent
     @NotNull
