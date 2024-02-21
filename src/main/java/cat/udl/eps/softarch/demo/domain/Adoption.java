@@ -2,15 +2,15 @@ package cat.udl.eps.softarch.demo.domain;
 
 import java.util.Date;
 
-public class Adoption {
-    private Integer id;
+public class Adoption extends UriEntity<Long> {
+    private Long id;
     private String type;
     private Boolean confirmed;
     private Date startDate;
     private Date endDate;
 
     // Constructor
-    public Adoption(Integer id, String type, Boolean confirmed, Date startDate, Date endDate) {
+    public Adoption(Long id, String type, Boolean confirmed, Date startDate, Date endDate) {
         this.id = id;
         this.type = type;
         this.confirmed = confirmed;
@@ -20,14 +20,10 @@ public class Adoption {
 
     // Getters and Setters
     
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
+    
     public String getType() {
         return type;
     }
