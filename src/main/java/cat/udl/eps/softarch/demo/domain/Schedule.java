@@ -1,12 +1,14 @@
 package cat.udl.eps.softarch.demo.domain;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
-
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-import java.time.LocalDateTime;
+import java.util.Date;
+
 
 @Entity
 @Table(name = "Schedule") //Avoid collision with system table User
@@ -16,12 +18,17 @@ import java.time.LocalDateTime;
 public class Schedule extends UriEntity<Long> {
 
     @Id
-    private Integer id;
+    private long id;
 
     @NotNull
-    private LocalDateTime start;
+    private Date start;
 
     @NotNull
-    private LocalDateTime end;
+    private Date end;
 
+
+    @Override
+    public Long getId() {
+        return id;
+    }
 }
