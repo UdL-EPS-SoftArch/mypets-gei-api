@@ -3,7 +3,7 @@ package cat.udl.eps.softarch.demo.domain;
 import java.util.Date;
 
 public class Adoption extends UriEntity<Long> {
-    private Long id;
+    private final Long id;
     private String type;
     private Boolean confirmed;
     private Date startDate;
