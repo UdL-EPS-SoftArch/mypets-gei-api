@@ -2,14 +2,16 @@ package cat.udl.eps.softarch.demo.domain;
 
 import java.util.Date;
 
-public class MedicalRecord {
-    private Integer id;
+public class MedicalRecord extends UriEntity<Long> {
+    private final Long id;
     private String issue;
     private String description;
     private Date date;
+    
+    
 
     // Constructor
-    public MedicalRecord(Integer id, String issue, String description, Date date) {
+    public MedicalRecord(Long id, String issue, String description, Date date) {
         this.id = id;
         this.issue = issue;
         this.description = description;
@@ -17,12 +19,8 @@ public class MedicalRecord {
     }
 
     // Getters and Setters
-    public Integer getId() {
+    public Long getId() {
         return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
     }
 
     public String getIssue() {
