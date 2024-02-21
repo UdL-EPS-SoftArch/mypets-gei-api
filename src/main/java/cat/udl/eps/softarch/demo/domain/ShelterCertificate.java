@@ -6,5 +6,9 @@ public class ShelterCertificate extends UriEntity<Long> {
     
     private Long id;
     private Date expirationDate;
-    
+
+    @Override
+    public Long getId() {
+        return id;
+    }
 }
