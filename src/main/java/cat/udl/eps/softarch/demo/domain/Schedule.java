@@ -2,10 +2,11 @@ package cat.udl.eps.softarch.demo.domain;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.PastOrPresent;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "Schedule") //Avoid collision with system table User
@@ -23,15 +24,4 @@ public class Schedule extends UriEntity<Long> {
     @NotNull
     private LocalDateTime end;
 
-    public LocalDateTime getStart() {
-        return start;
-    }
-
-    public LocalDateTime getEnd() {
-        return end;
-    }
-
-    public Integer getId() {
-        return id;
-    }
 }
