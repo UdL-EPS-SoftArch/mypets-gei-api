@@ -2,6 +2,7 @@ package cat.udl.eps.softarch.demo.domain;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -21,4 +22,7 @@ public class Schedule extends UriEntity<Long> {
 
     @NotNull
     private Date finish;
+
+    @ManyToOne
+    public Shelter available;
 }
