@@ -1,15 +1,106 @@
 @startuml
-
-class User extends UriEntity implements UserDetails {
+interface User extends UriEntity implements UserDetails {
   username : String
   password : String
   email : String
+  dni: String
+  dateOfBirth: String
+}
+class Client implements User{
+
+}
+class Admin implements User{
+
+}
+class ShelterVolunteer implements User{
+
 }
 
 class UriEntity {
   uri : String
 }
 
-User "1" --right-- "*" Resource : owner <
+class Pet {
+  id: Integer
+  name: String
+  isAdopted: Boolean
+  color: String
+  size: String
+  weight: double
+  age: String
+  description: String
+  breed: String
 
+}
+
+class Shelter {
+  id: Integer
+  name: String
+  email: String
+  mobile : String
+  createdAt: DateDateTime
+  updatedAt: DateDateTime
+  isActive: Boolean
+  rating: Integer
+
+}
+
+class Location {
+ id: Integer
+ address: String
+ latitude: Float
+ longitude: Float
+ province: String
+ municipality: String
+ postalCode: String
+}
+
+class ShelterCertificate {
+  id: String
+  expirationDate: DateDateTime
+}
+
+class SocialNetworks {
+  id: Integer
+  instagram: String
+  twitter: String
+}
+
+class Schedule {
+    id: Integer
+    startDateTime: DateTime
+    endDateTime: DateTime
+}
+
+class Adoption{
+    id: Integer
+    type: String
+    confirmed: Boolean
+    startDate: DateTime
+    endDate: DateTime
+}
+
+
+
+class MedicalRecord {
+    id : Integer
+    issue : String
+    description: String
+    date : Date
+}
+
+
+Pet "1" -- "*" MedicalRecord : has >
+
+
+Location "1" -> "1" Shelter : has>
+
+Shelter "1" -> "*" SocialNetworks : < has
+Shelter "1" -> "*" Pet : has >
+Shelter "1" -> "1" ShelterCertificate : has >
+Schedule "1.*" -> "1" Shelter :available >
+Client "*" -> "*" Shelter : donate >
+Adoption "*" -> "1" Pet :adopted >
+Adoption "*" -> "1" User :adopt <
+ShelterVolunteer "1.*" -> "*" Shelter : works >
 @enduml
