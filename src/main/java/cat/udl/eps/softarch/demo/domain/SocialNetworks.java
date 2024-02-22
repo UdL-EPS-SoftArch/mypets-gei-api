@@ -9,11 +9,11 @@ import lombok.EqualsAndHashCode;
 public class SocialNetworks extends UriEntity<Long> {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    Long id;
-    String instagram;
-    String twitter;
+    private Long id;
+    private String instagram;
+    private String twitter;
 
     @ManyToOne
-    Shelter belongsTo;
+    public Shelter belongsTo;
 
 }
