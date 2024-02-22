@@ -10,7 +10,11 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
 import jakarta.validation.constraints.NotNull;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 
+@EqualsAndHashCode(callSuper = true)
+@Data
 @Entity
 public class ShelterCertificate extends UriEntity<Long> {
 
@@ -21,11 +25,6 @@ public class ShelterCertificate extends UriEntity<Long> {
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     @NotNull
     private ZonedDateTime expirationDate;
-
-    @Override
-    public Long getId() {
-        return id;
-    }
 
     @JsonIdentityReference(alwaysAsId = true)
     @ManyToOne
