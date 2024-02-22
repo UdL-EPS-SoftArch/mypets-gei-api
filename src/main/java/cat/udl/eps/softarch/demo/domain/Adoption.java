@@ -2,10 +2,11 @@ package cat.udl.eps.softarch.demo.domain;
 
 import jakarta.persistence.Id;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-import java.util.Date;
+import java.time.ZonedDateTime;
 
 @EqualsAndHashCode(callSuper = true)
 @Data
@@ -17,12 +18,12 @@ public class Adoption extends UriEntity<Long> {
     @NotBlank
     private String type;
     
-    @NotBlank
+    @NotNull
     private Boolean confirmed;
     
     @NotBlank
-    private Date startDate;
+    private ZonedDateTime startDate;
     
     
-    private Date endDate;
+    private ZonedDateTime endDate;
 }
