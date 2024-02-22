@@ -13,6 +13,7 @@ import lombok.EqualsAndHashCode;
 public class ShelterVolunteer extends User {
     @Id
     private long Id;
+
     @JsonIdentityReference(alwaysAsId = true)
     @ManyToOne
     private Shelter userShelter;
