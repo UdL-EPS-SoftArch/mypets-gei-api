@@ -1,7 +1,13 @@
 package cat.udl.eps.softarch.demo.domain;
 
+import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 
+@EqualsAndHashCode(callSuper = true)
+@Entity
+@Data
 public class Pet extends UriEntity<Long> {
     @Id
     Long id;
@@ -13,9 +19,4 @@ public class Pet extends UriEntity<Long> {
     String age;
     String description;
     String breed;
-
-    @Override
-    public Long getId() {
-        return id;
-    }
 }
