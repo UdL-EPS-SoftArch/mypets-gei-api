@@ -1,13 +1,12 @@
 package cat.udl.eps.softarch.demo.domain;
 
-import jakarta.persistence.Id;
+import jakarta.persistence.Entity;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 
-public class Admin extends UriEntity<Long>{
-    @Id
-    Long id;
+@EqualsAndHashCode(callSuper = true)
+@Entity
+@Data
+public class Admin extends User{
 
-    @Override
-    public Long getId() {
-        return id;
-    }
 }
