@@ -11,6 +11,6 @@ import java.util.List;
 
 public interface PetRepository extends CrudRepository<Pet, Long>, PagingAndSortingRepository<Pet, Long> {
     List<User> findBySize(@Param("size") String size);
-    List<User> findByShelter(@Param("Shelter") Shelter shelter);
+    //List<User> findByShelter(@Param("Shelter") Shelter shelter);
 
 }
