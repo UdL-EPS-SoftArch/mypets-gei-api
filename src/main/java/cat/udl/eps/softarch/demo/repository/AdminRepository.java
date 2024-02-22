@@ -9,6 +9,6 @@ import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 
-public interface AdminRepository extends CrudRepository<Admin, Long>, PagingAndSortingRepository<Admin, Long> {
+public interface AdminRepository extends CrudRepository<Admin, String>, PagingAndSortingRepository<Admin, String> {
     List<User> findByIdContaining(@Param("text") String text);
 }
