@@ -44,4 +44,7 @@ public class Shelter extends UriEntity<Long> {
     private boolean isActive;
 
     private Integer rating;
+
+    @OneToOne
+    public Location locatedAt;
 }
