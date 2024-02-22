@@ -21,11 +21,6 @@ public class Pet extends UriEntity<Long> {
     String description;
     String breed;
 
-    @OneToMany
-    public MedicalRecord has;
-
-    @OneToMany
-    public Adoption wasAdopted;
 
     @ManyToOne
     public Shelter isIn;
