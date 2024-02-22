@@ -20,5 +20,5 @@ public class Schedule extends UriEntity<Long> {
     private Date start;
 
     @NotNull
-    private Date end;
+    private Date finish;
 }
