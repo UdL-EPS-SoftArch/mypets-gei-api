@@ -1,6 +1,7 @@
 package cat.udl.eps.softarch.demo.domain;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -10,7 +11,9 @@ import lombok.EqualsAndHashCode;
 @Data
 public class Pet extends UriEntity<Long> {
     @Id
+    @GeneratedValue
     Long id;
+
     String name;
     boolean isAdopted;
     String color;
