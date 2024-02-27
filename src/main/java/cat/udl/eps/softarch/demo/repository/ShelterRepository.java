@@ -1,5 +1,6 @@
 package cat.udl.eps.softarch.demo.repository;
 
+import cat.udl.eps.softarch.demo.domain.Location;
 import cat.udl.eps.softarch.demo.domain.Shelter;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.PagingAndSortingRepository;
@@ -11,6 +12,6 @@ import java.util.List;
 
 @RepositoryRestResource
 public interface ShelterRepository extends CrudRepository<Shelter, Long>, PagingAndSortingRepository<Shelter, Long> {
-    List<Shelter> findByLocatedAt(@Param("shelter") Shelter shelter);
+    List<Shelter> findByLocatedAt(@Param("location") Location locatedAt);
 
 }
