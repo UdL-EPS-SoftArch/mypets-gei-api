@@ -1,9 +1,5 @@
 package cat.udl.eps.softarch.demo.domain;
-
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -13,7 +9,11 @@ import lombok.EqualsAndHashCode;
 public class SocialNetworks extends UriEntity<Long> {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    Long id;
-    String instagram;
-    String twitter;
+    private Long id;
+    private String instagram;
+    private String twitter;
+
+    @ManyToOne
+    public Shelter belongsTo;
+
 }
