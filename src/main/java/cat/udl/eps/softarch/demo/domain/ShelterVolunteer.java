@@ -12,7 +12,7 @@ import lombok.EqualsAndHashCode;
 @Entity
 public class ShelterVolunteer extends User {
     @Id
-    private long Id;
+    private String Id;
 
     @JsonIdentityReference(alwaysAsId = true)
     @ManyToOne
