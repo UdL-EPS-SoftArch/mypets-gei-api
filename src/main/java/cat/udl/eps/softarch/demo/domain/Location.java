@@ -1,7 +1,6 @@
 package cat.udl.eps.softarch.demo.domain;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -26,5 +25,9 @@ public class Location extends UriEntity<Long>{
     private String municipality;
 
     private String postalCode;
+
+    @OneToOne
+    @JoinColumn(name = "shelter_id")
+    private Shelter shelter;
 
 }
