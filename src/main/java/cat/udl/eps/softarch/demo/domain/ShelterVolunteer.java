@@ -2,7 +2,6 @@ package cat.udl.eps.softarch.demo.domain;
 
 import com.fasterxml.jackson.annotation.JsonIdentityReference;
 import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -11,9 +10,6 @@ import lombok.EqualsAndHashCode;
 @Data
 @Entity
 public class ShelterVolunteer extends User {
-    @Id
-    private String Id;
-
     @JsonIdentityReference(alwaysAsId = true)
     @ManyToOne
     private Shelter userShelter;
