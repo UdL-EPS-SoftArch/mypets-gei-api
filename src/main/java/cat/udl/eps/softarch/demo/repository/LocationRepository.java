@@ -11,5 +11,5 @@ import java.util.List;
 @RepositoryRestResource
 public interface LocationRepository extends CrudRepository<Location, String>, PagingAndSortingRepository<Location, String> {
 
-  List<User> findByIdContaining(@Param("text") String text);
+  Location findByIdContaining(@Param("text") String text);
 }
