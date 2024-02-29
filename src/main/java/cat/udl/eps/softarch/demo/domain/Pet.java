@@ -1,9 +1,6 @@
 package cat.udl.eps.softarch.demo.domain;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -27,4 +24,6 @@ public class Pet extends UriEntity<Long> {
 
     @ManyToOne
     public Shelter isIn;
+    @ManyToMany
+    public User favouritedBy;
 }
