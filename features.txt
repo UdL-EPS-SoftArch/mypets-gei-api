@@ -1,0 +1,39 @@
+FEATURES LIST:
+
+USER FEATURES:
+[EL] - Register
+[EL] - Login
+[EL] - Logout
+[EL] - Add favourite
+[EL] - Remove favourite
+[FC] - Process adoption
+[BB] - View pets catalogue
+[BB] - Edit user
+[BB] - Donate charities (cash and/or goods)
+
+ADMIN FEATURES:
+- GOD
+[JJ] - Create Shelter
+[JJ] - Delete Shelter
+[JJ] - Kick User from Shelter
+[BM] - Validate Shelter Certificate
+[BB] - Disable User
+
+SHELTER VOLUNTEER FEATURES:
+[BM] - Create Pet
+[BM] - Add new Volunteer to Shelter
+[BM] - Add ShelterCertificate
+[BM] - Edit Pet
+[JJ] - Edit Shelter
+[JJ] - Delete Pet
+[FC] - Validate Adoption
+[FC] - Add Medical Record
+[FC] - Edit Medical Record
+[FC] - Process Manual Adoptions
+
+Groups:
+- BM -> Faysal Badaoui and Pere Muñoz
+- EL -> Pol Escolà and Antonio López
+- JJ -> Gerard Jaimejuan and Sebastian Jitaru
+- FC -> Mario Fernández and Àlex Codina
+- BB -> Angelo Barbasola and Gabriel Bogdan
