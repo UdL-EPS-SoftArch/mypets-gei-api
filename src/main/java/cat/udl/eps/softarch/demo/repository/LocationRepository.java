@@ -9,5 +9,5 @@ import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 @RepositoryRestResource
 public interface LocationRepository extends CrudRepository<Location, String>, PagingAndSortingRepository<Location, String> {
 
-  /*Location findByIdContaining(@Param("text") String text);*/
+  Location findByIdContaining(@Param("shelter") String shelter);
 }
