@@ -25,5 +25,5 @@ public class Pet extends UriEntity<Long> {
     @ManyToOne
     public Shelter isIn;
     @ManyToMany
-    public User favouritedBy;
+    public User[] favouritedBy;
 }
