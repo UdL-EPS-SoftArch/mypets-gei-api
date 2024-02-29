@@ -22,5 +22,5 @@ public interface ClientRepository extends CrudRepository<Client, String>, Paging
    * https://docs.spring.io/spring-data/jpa/docs/current/reference/html/#jpa.query-methods.query-creation
    */
 
-  List<User> findByIdContaining(@Param("text") String text);
+  List<Client> findByIdContaining(@Param("text") String text);
 }
