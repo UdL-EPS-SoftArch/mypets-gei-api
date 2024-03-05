@@ -6,17 +6,20 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import cat.udl.eps.softarch.demo.domain.ShelterVolunteer;
 import cat.udl.eps.softarch.demo.domain.User;
+import cat.udl.eps.softarch.demo.repository.ShelterRepository;
 import cat.udl.eps.softarch.demo.repository.UserRepository;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.When;
+import jakarta.validation.constraints.AssertTrue;
 import org.json.JSONObject;
 import org.junit.Assert;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 public class CreateShelterStepDefs {
-
+    private ShelterRepository shelterRepository;
     @Given("^There is no shelter registered with the name \"([^\"]*)\" and location \"([^\"]*)\"$")
     public void thereIsNoShelterRegisteredWithTheNameAndLocation(String name, String location) {
         Assert.assertFalse("Shelter with name \""
@@ -24,9 +27,10 @@ public class CreateShelterStepDefs {
                 shelterRepository.existsByNameAndLocation(name, location));
     }
 
-    @And("I am a shelter manager")
-    public void iAmAShelterManager() {
-        
+    @And("I am a shelter volunteer")
+    public void iAmAShelterVolunteer(User user) {
+        Assert.assertTrue("User should be a shelter volunteer",
+                user instanceof ShelterVolunteer);
     }
 
     @When("I attempt to create a new shelter with name {string} and location {string}")
