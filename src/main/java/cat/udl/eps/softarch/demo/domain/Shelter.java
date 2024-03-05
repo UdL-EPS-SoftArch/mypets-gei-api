@@ -1,5 +1,7 @@
 package cat.udl.eps.softarch.demo.domain;
 
+import cat.udl.eps.softarch.demo.domain.Location;
+
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -44,4 +46,7 @@ public class Shelter extends UriEntity<Long> {
     private boolean isActive;
 
     private Integer rating;
+
+    @OneToOne
+    public Location locatedAt;
 }
