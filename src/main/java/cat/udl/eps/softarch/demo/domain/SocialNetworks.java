@@ -10,12 +10,12 @@ public class SocialNetworks extends UriEntity<Long> {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-    private String username;
     private String type;
-    private String url;
+    private String username;
+    private String uri;
+
 
     @ManyToOne
     public Shelter belongsTo;
-
 
 }
