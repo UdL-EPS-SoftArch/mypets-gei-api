@@ -6,6 +6,6 @@ Feature: Create Shelter
   Scenario: Create a new shelter
     Given There is no shelter registered with the name "shelter" and location "city"
     And I am a shelter volunteer
-    When I attempt to create a new shelter with name "shelter" and location "city"
+    When I create a new shelter with name "shelter" and location "city"
     Then The response code is 201
-    And The response contains a success message confirming the shelter was created
+    And It has been created a user with username "shelter" and location "city", the password is not returned
