@@ -6,10 +6,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import cat.udl.eps.softarch.demo.domain.Location;
-import cat.udl.eps.softarch.demo.domain.Shelter;
-import cat.udl.eps.softarch.demo.domain.ShelterVolunteer;
-import cat.udl.eps.softarch.demo.domain.User;
+import cat.udl.eps.softarch.demo.domain.*;
 import cat.udl.eps.softarch.demo.repository.ShelterRepository;
 import cat.udl.eps.softarch.demo.repository.UserRepository;
 import io.cucumber.java.en.And;
@@ -33,10 +30,10 @@ public class CreateShelterStepDefs {
                 + name + "\" and location \"" + location + "\" shouldn't exist", shelterRepository.findByLocatedAtAndName(location, name).isEmpty());
     }
 
-    @And("I am a shelter volunteer")
-    public void iAmAShelterVolunteer(User user) {
+    @And("I am a admin")
+    public void iAmAdmin(User user) {
         Assert.assertTrue("User should be a shelter volunteer",
-                user instanceof ShelterVolunteer);
+                user instanceof Admin);
     }
 
     @When("I create a new shelter with name {string} and location {string}")
@@ -75,5 +72,15 @@ public class CreateShelterStepDefs {
                 .andExpect(jsonPath("$.location", is(location)))
                 .andExpect(jsonPath("$.id").exists())
                 .andExpect(jsonPath("$.password").doesNotExist());
+    }
+
+    @And("I am a shelter volunteer")
+    public void iAmAShelterVolunteer(User user) {
+        Assert.assertTrue("User should be a shelter volunteer",
+                user instanceof ShelterVolunteer);
+    }
+
+    @And("The response is {string}")
+    public void theResponseIs(String arg0) {
     }
 }
