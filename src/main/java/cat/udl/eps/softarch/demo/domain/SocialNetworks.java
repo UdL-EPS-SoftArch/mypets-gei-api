@@ -10,8 +10,10 @@ public class SocialNetworks extends UriEntity<Long> {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-    private String instagram;
-    private String twitter;
+    private String type;
+    private String username;
+    private String uri;
+
 
     @ManyToOne
     public Shelter belongsTo;
