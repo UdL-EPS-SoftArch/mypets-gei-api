@@ -1,7 +1,18 @@
 Feature: Create Shelter
   In order to provide temporary housing for animals
-  As a shelter manager
-  I want to create shelters and manage their information
+  As a Admin
+  I want to create shelters
+
+  Background:
+    Given There is a registered user with username "user" and password "password" and email "user@sample.app"
+    Given There is a registered admin with name "admin" and password "password" and email "admin@sample.app"
+    Given I login as "user" with password "password"
+
+  Scenario: Create a route without being logged in
+    Given I'm not logged in
+    When I create a shelter with a name "testShelter", location "testLocation"
+    Then The response code is 401
+    And The error message is "Unauthorized"
 
   Scenario: Create a new shelter as Admin
     Given There is no shelter registered with the name "shelter" and location "city"
