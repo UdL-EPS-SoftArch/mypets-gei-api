@@ -9,7 +9,7 @@ USER FEATURES:
 [FC] - Process adoption
 [BB] - View pets catalogue
 [BB] - Edit user
-[BB] - Donate charities (cash and/or goods)
+[BM] - Donate charities (cash and/or goods)
 
 ADMIN FEATURES:
 - GOD
@@ -17,13 +17,13 @@ ADMIN FEATURES:
 [JJ] - Delete Shelter
 [JJ] - Kick User from Shelter
 [BM] - Validate Shelter Certificate
-[BB] - Disable User
+[BM] - Disable User
 
 SHELTER VOLUNTEER FEATURES:
-[BM] - Create Pet
-[BM] - Add new Volunteer to Shelter
+[SI] - Create Pet
+[SI] - Add new Volunteer to Shelter
 [BM] - Add ShelterCertificate
-[BM] - Edit Pet
+[SI] - Edit Pet
 [JJ] - Edit Shelter
 [JJ] - Delete Pet
 [FC] - Validate Adoption
@@ -37,3 +37,4 @@ Groups:
 - JJ -> Gerard Jaimejuan and Sebastian Jitaru
 - FC -> Mario Fernández and Àlex Codina
 - BB -> Angelo Barbasola and Gabriel Bogdan
+- SI -> Selma and Irfan
