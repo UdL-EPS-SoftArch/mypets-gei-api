@@ -4,31 +4,35 @@ Feature: Login User
   I want to login myself to access it
 
   Scenario: Login already registered user
-    Given I'm not logged in
-    When I enter my registered username "user" with password "password"
-    Then The response code is 201
-    And I am successfully logged in
+    Given There is a registered user with username "user" and password "password"
+    And I'm not logged in
+    When I login with username "user" and password "password"
+    Then The response code is 200
+    And I can login with username "user" and password "password"
 
   Scenario: Login with a non existing user
-    Given I'm not logged in
-    When I enter username "sdafddsaf" and password "password"
+    Given There isn't registered user with username "anonymous"
+    And I'm not logged in
+    When I login with username "anonymous" and password "password"
     Then The response code is 404
-    And I am prompt a error saying that the username or password are wrong
+    And The error message is "wrong user or password"
 
   Scenario: Login with a incorrect password
-    Given I'm not logged in
-    When I login with username "user" and password "afsdfsaafs"
+    Given There is a registered user with username "user" and password "password"
+    And I'm not logged in
+    When I login with username "user" and password "anonymous"
     Then The response code is 404
-    And I am prompt a error saying that the username or password are wrong
+    And The error message is "wrong user or password"
 
   Scenario: Login with empty username
     Given I'm not logged in
-    When I log in with username "" and password "passsword"
-    Then The response code is 406
+    When I login with username "" and password "password"
+    Then The response code is 404
     And The error message is "must not be blank"
 
    Scenario: Login with empty password
-     Given I'm not logged in
-     When I log in with username "user" and password ""
-     Then The response code is 406
+     Given There is a registered user with username "user" and password "password"
+     And I'm not logged in
+     When I login with username "user" and password ""
+     Then The response code is 400
      And The error message is "must not be blank"
