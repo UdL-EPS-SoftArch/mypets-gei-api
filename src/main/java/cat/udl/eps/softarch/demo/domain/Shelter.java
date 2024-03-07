@@ -54,5 +54,6 @@ public class Shelter extends UriEntity<Long> {
     public void prePersist() {
         createdAt = ZonedDateTime.now();
         updatedAt = ZonedDateTime.now();
+        isActive = false;
     }
 }
