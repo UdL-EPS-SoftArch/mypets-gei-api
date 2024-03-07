@@ -14,6 +14,7 @@ import lombok.NoArgsConstructor;
 
 public class Location extends UriEntity<Long> {
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
     private String address;
