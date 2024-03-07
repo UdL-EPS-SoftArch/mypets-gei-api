@@ -3,10 +3,7 @@ package cat.udl.eps.softarch.demo.domain;
 import java.time.ZonedDateTime;
 import com.fasterxml.jackson.annotation.JsonIdentityReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -23,6 +20,9 @@ public class ShelterCertificate extends UriEntity<Long> {
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     @NotNull
     private ZonedDateTime expirationDate;
+
+    @NotNull
+    private Boolean validated;
 
     @JsonIdentityReference(alwaysAsId = true)
     @ManyToOne
