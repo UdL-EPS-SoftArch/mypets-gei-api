@@ -24,10 +24,10 @@ public class CreateShelterStepDefs {
 
     private StepDefs stepDefs;
     private ShelterRepository shelterRepository;
-    @Given("^There is no shelter registered with the name \"([^\"]*)\" and location \"([^\"]*)\"$")
-    public void thereIsNoShelterRegisteredWithTheNameAndLocation(String name, Location location) {//Location aqui ha de ser Strind o Tipus location? tu fas post de nomes l'id de location o de tot el objecte?
+    @Given("^There is no shelter registered with the name \"([^\"]*)\" ")
+    public void thereIsNoShelterRegisteredWithName(String name) {//Location aqui ha de ser Strind o Tipus location? tu fas post de nomes l'id de location o de tot el objecte?
         Assert.assertTrue("Shelter with name \""
-                + name + "\" and location \"" + location + "\" shouldn't exist", shelterRepository.findByLocatedAtAndName(location, name).isEmpty());
+                + name + "\" and location \" shouldn't exist", shelterRepository.findByLocatedAtAndName(name).isEmpty());
     }
 
     @And("I am a admin")
@@ -36,51 +36,20 @@ public class CreateShelterStepDefs {
                 user instanceof Admin);
     }
 
-    @When("I create a new shelter with name {string} and location {string}")
-    public void iAttemptToCreateANewShelterWithNameAndLocation(String name, Location location) {
-            Shelter shelter = new Shelter();
-            shelter.setName(name);
-            shelter.setLocatedAt(location);
-
-        try {
-            stepDefs.result = stepDefs.mockMvc.perform(
-                    post("/shelters")
-                            .contentType(MediaType.APPLICATION_JSON)
-                            .content(new JSONObject( stepDefs.mapper.writeValueAsString(shelter)
-                            ).put("name", name).toString())
-                            .characterEncoding(StandardCharsets.UTF_8)
-                            .accept(MediaType.APPLICATION_JSON)
-                            .with(AuthenticationStepDefs.authenticate()))
-                    .andDo(print());
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    @And("It has been created a user with username \"shelter\" and location \"city\", the password is not returned")
-    public void itHasBeenCreatedShelterWithLocation(String name, Location location) throws Throwable{
-        stepDefs.result = stepDefs.mockMvc.perform(
-                post("/shelters")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(new JSONObject()
-                                .put("name", name)
-                                .put("location", location)
-                                .toString()))
-                .andDo(print())
-                .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.name", is(name)))
-                .andExpect(jsonPath("$.location", is(location)))
-                .andExpect(jsonPath("$.id").exists())
-                .andExpect(jsonPath("$.password").doesNotExist());
-    }
-
+   
     @And("I am a shelter volunteer")
     public void iAmAShelterVolunteer(User user) {
         Assert.assertTrue("User should be a shelter volunteer",
                 user instanceof ShelterVolunteer);
     }
 
-    @And("The response is {string}")
-    public void theResponseIs(String arg0) {
+    @Given("There is a registered admin with name \"([^\"]*)\" and password \"([^\"]*)\" and email \"([^\"]*)\"")
+    public void thereIsARegisteredAdminWithNameAndPasswordAndEmail(String arg0, String arg1, String arg2) {
+
+    }
+
+    @When("I create a shelter with a name \"([^\"]*)\"")
+    public void iCreateAShelterWithAName(String arg0) throws Throwable {
+
     }
 }

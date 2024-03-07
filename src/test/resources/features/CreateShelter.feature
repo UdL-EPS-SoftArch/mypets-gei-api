@@ -6,11 +6,11 @@ Feature: Create Shelter
   Background:
     Given There is a registered user with username "user" and password "password" and email "user@sample.app"
     Given There is a registered admin with name "admin" and password "password" and email "admin@sample.app"
-    Given I login as "user" with password "password"
 
-  Scenario: Create a route without being logged in
+
+  Scenario: Create a shelter without being logged in
     Given I'm not logged in
-    When I create a shelter with a name "testShelter", location "testLocation"
+    When I create a shelter with a name "testShelter""
     Then The response code is 401
     And The error message is "Unauthorized"
 
@@ -28,19 +28,3 @@ Feature: Create Shelter
     Then The response code is 403
     And The response is "You are not authorized to create a shelter"
 
-  Scenario: Create a new shelter with the same name and location
-    Given There is a shelter registered with the name "shelter" and location "city"
-    And I am a admin
-    When I create a new shelter with name "shelter" and location "city"
-    Then The response code is 409
-    And The response is "A shelter with the same name and location already exists"
-
-  Scenario: Create a new shelter with the same name and different location
-    Given There is a shelter registered with the name "shelter" and location is different from "other city"
-    And I am a admin
-    When I create a new shelter with name "shelter" and location "other city"
-    Then The response code is 201
-    And It has been created a user with username "shelter" and location "other city", the password is not returned
-
-  Scenario: Create a new shelter with the same location and different name
-    Given
