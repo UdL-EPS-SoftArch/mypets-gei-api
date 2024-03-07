@@ -23,7 +23,7 @@ public class Adoption extends UriEntity<Long> {
     @NotNull
     private Boolean confirmed;
     
-    @NotBlank
+    @NotNull
     private ZonedDateTime startDate;
     
     
