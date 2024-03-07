@@ -24,6 +24,7 @@ public class Shelter extends UriEntity<Long> {
     private Long id;
 
     @NotBlank
+    @Column(unique = true)
     private String name;
 
     @NotBlank
@@ -36,10 +37,12 @@ public class Shelter extends UriEntity<Long> {
     private String mobile;
 
     @PastOrPresent
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @NotNull
     private ZonedDateTime createdAt;
 
     @PastOrPresent
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private ZonedDateTime updatedAt;
 
     @NotNull

@@ -12,5 +12,5 @@ import java.util.List;
 
 @RepositoryRestResource
 public interface ShelterRepository extends CrudRepository<Shelter, Long>, PagingAndSortingRepository<Shelter, Long> {
-    List<Shelter> findByLocatedAtAndName(@Param("location") Location locatedAt, @Param("name") String name);
+    List<Shelter> findByName(@Param("name") String name);
 }
