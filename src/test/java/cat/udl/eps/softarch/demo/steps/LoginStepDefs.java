@@ -41,19 +41,18 @@ public class LoginStepDefs {
         }
     }
 
-    @And("^And I'm not logged in$")
-    public void iMNotLoggedIn(String username) throws Throwable {
 
-    }
 
     @When("^I login with username \"([^\"]*)\" and password \"([^\"]*)\"$")
     public void iLoginWithUsernameAndPassword(String username, String password) throws Exception {
+        AuthenticationStepDefs.currentUsername = username;
+        AuthenticationStepDefs.currentPassword = password;
+
         stepDefs.result = stepDefs.mockMvc.perform(
-                get("/users/{username}", username)
-                        .accept(MediaType.APPLICATION_JSON)
-                        .with(AuthenticationStepDefs.authenticate()))
-                .andDo(print())
-                .andExpect(jsonPath("$.password").doesNotExist());
+                        get("/identity")
+                                .accept(MediaType.APPLICATION_JSON)
+                                .with(AuthenticationStepDefs.authenticate()))
+                .andDo(print());
     }
 
 
