@@ -4,8 +4,7 @@ USER FEATURES:
 [EL] - Register
 [EL] - Login
 [EL] - Logout
-[EL] - Add favourite
-[EL] - Remove favourite
+[EL] - Modify favourite
 [FC] - Process adoption
 [BB] - View pets catalogue
 [BB] - Edit user
