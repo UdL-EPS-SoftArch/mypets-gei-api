@@ -10,8 +10,6 @@ import io.cucumber.java.en.When;
 import org.junit.Assert;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.util.List;
-import java.util.Objects;
 
 public class ModifyFavouriteSteps {
     @Autowired
@@ -39,9 +37,9 @@ public class ModifyFavouriteSteps {
         pet.setId(favouritedPet);
         petId = favouritedPet;
         User[] userList = pet.getFavouritedBy();
-        for (int i=0; i<userList.length; i++){
+        for (User value : userList) {
             assert user.getId() != null;
-            if (user.getId().equals(userList[i].getId())){
+            if (user.getId().equals(value.getId())) {
                 //remove entry
             } else {
                 //create entry
@@ -50,6 +48,15 @@ public class ModifyFavouriteSteps {
     }
     @And("The entry on the relation \"favourites\" is created")
     public void theEntryIsCreated(){
+        Assert.assertTrue(favouritedByUsers());
+    }
+
+    @And("The entry on the relation \"favourites\" is deleted")
+    public void theEntryIsDeleted(){
+        Assert.assertFalse(favouritedByUsers());
+    }
+
+    private boolean favouritedByUsers(){
         boolean found = false;
         Pet pet = new Pet();
         pet.setId(petId);
@@ -60,6 +67,6 @@ public class ModifyFavouriteSteps {
                 break;
             }
         }
-        Assert.assertTrue(found);
+        return found;
     }
 }
