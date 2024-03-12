@@ -19,7 +19,7 @@ Feature: Validate Adoption
     And The error message is "Pet with ID '999' not found"
 
   Scenario: Validate adoption request for already adopted pet
-    Given There is a pending adoption request for pet with ID "456" by user "mary_jones"
+    Given There is a pending adoption request for pet with ID "456" by user "user"
     And the pet with ID "456" is already marked as adopted
     And I'm logged in as admin or shelter staff
     When I attempt to validate the adoption request for pet with ID "456" by user "user"
@@ -27,7 +27,7 @@ Feature: Validate Adoption
     And The error message is "Pet with ID '456' is already adopted"
 
   Scenario: Validate adoption request without proper authorization
-    Given There is a pending adoption request for pet with ID "789" by user "pet_lover_123"
+    Given There is a pending adoption request for pet with ID "789" by user "user"
     And I'm not logged in or logged in as a regular user, not admin or shelter staff
     When I attempt to validate the adoption request for pet with ID "789" by user "user"
     Then The response code is 403
