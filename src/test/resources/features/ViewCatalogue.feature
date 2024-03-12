@@ -12,13 +12,16 @@ Feature: View Pets Catalogue
 
   Scenario: View Pets Catalogue as a Client
     Given I login as "client" with password "password"
-    When I
+    When I request the Catalogue
     Then The response code is 200
 
   Scenario: View Pets Catalogue without being logged in
     Given I'm not logged in
+    When I request the Catalogue
+    Then The response code is 200
 
   Scenario: View Pets Catalogue as a Shelter Volunteer
     Given I'm logged in as a Volunteer
-
-  Scenario: View Pets Catalogue from a specific
+    When I request the Catalogue
+    Then I'm shown the Catalogue from the shelter I work in
+    And The response code is 200
