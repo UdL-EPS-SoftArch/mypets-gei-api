@@ -9,7 +9,7 @@ public class ValidateAdoptionStepDefs {
     public void thereIsAPendingAdoptionRequestForPetWithIDByUser(String arg0, String arg1) {
     }
 
-    @And("I'm not logged in or logged in as a regular user, not admin or shelter staff")
+    @And("I'm not logged in or logged in as a regular user, not admin or shelter volunteer")
     public void iMNotLoggedInOrLoggedInAsARegularUserNotAdminOrShelterStaff() {
         
     }
@@ -24,7 +24,7 @@ public class ValidateAdoptionStepDefs {
         
     }
 
-    @And("I'm logged in as admin or shelter staff")
+    @And("I'm logged in as admin or shelter volunteer")
     public void iMLoggedInAsAdminOrShelterStaff() {
         
     }
