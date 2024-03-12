@@ -7,13 +7,13 @@ import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.When;
 import org.junit.Assert;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Optional;
 
 
 public class ModifyFavouriteSteps {
-    //@Autowired
-    //private UserRepository userRepository;
+    @Autowired
     private PetRepository petRepository;
     private StepDefs stepDefs;
     private Long petId;
@@ -34,44 +34,40 @@ public class ModifyFavouriteSteps {
         //  2.2 if not -> create entry      #marking as favourite
         User user = new User();
         user.setId(AuthenticationStepDefs.currentUsername);
-        Pet pet = new Pet();
-        pet.setId(favouritedPet);
-        petId = favouritedPet;
-        User[] userList = pet.getFavouritedBy();
+        Optional<Pet> pet = petRepository.findById(petId);
+        User[] userList = pet.get().getFavouritedBy();
         for (User value : userList) {
             assert user.getId() != null;
-//            if (user.getId().equals(value.getId())) {
-//                stepDefs.mockMvc.perform(
-//                                delete("/favourites")
-//                                        .contentType(MediaType.APPLICATION_JSON)
-//                                        .content(stepDefs.mapper.writeValueAsString(user.getId()))
-//                                        .characterEncoding(StandardCharsets.UTF_8)
-//                                        .accept(MediaType.APPLICATION_JSON)
-//                                        .with(AuthenticationStepDefs.authenticate()))
-//                        .andDo(print());
-//            } else {
-//                stepDefs.mockMvc.perform(
-//                                post("/favourites")
-//                                        .contentType(MediaType.APPLICATION_JSON)
-//                                        .content(stepDefs.mapper.writeValueAsString(user.getId()))
-//                                        .characterEncoding(StandardCharsets.UTF_8)
-//                                        .accept(MediaType.APPLICATION_JSON)
-//                                        .with(AuthenticationStepDefs.authenticate()))
-//                        .andDo(print());
-//            }
+            /*if (user.getId().equals(value.getId())) {
+                if (favouritedByUser()) {
+                    stepDefs.mockMvc.perform(
+                            delete("/favourites")
+                                    .contentType(MediaType.APPLICATION_JSON)
+                                    .content(stepDefs.mapper.writeValueAsString(user.getId()))
+                                    .characterEncoding(StandardCharsets.UTF_8)
+                                    .accept(MediaType.APPLICATION_JSON)
+                                    .with(AuthenticationStepDefs.authenticate()))
+                            .andDo(print());
+                } else {
+                    stepDefs.mockMvc.perform(
+                            post("/favourites")
+                                    .contentType(MediaType.APPLICATION_JSON)
+                                    .content(stepDefs.mapper.writeValueAsString(user.getId()))
+                                    .characterEncoding(StandardCharsets.UTF_8)
+                                    .accept(MediaType.APPLICATION_JSON)
+                                    .with(AuthenticationStepDefs.authenticate()))
+                            .andDo(print());
+                }
+            }*/
         }
     }
     @And("The entry on the relation \"favourites\" is created")
-    public void theEntryIsCreated(){
-        Assert.assertTrue(favouritedByUsers());
-    }
+    public void theEntryIsCreated(){Assert.assertTrue(favouritedByUser());}
 
     @And("The entry on the relation \"favourites\" is deleted")
-    public void theEntryIsDeleted(){
-        Assert.assertFalse(favouritedByUsers());
-    }
+    public void theEntryIsDeleted(){Assert.assertFalse(favouritedByUser());}
 
-    private boolean favouritedByUsers(){
+    private boolean favouritedByUser(){
         boolean found = false;
         Optional<Pet> pet = petRepository.findById(petId);
         User[] userList = pet.get().getFavouritedBy();
