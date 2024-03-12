@@ -3,18 +3,19 @@ package cat.udl.eps.softarch.demo.steps;
 import cat.udl.eps.softarch.demo.domain.Pet;
 import cat.udl.eps.softarch.demo.domain.User;
 import cat.udl.eps.softarch.demo.repository.PetRepository;
-import cat.udl.eps.softarch.demo.repository.UserRepository;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.When;
 import org.junit.Assert;
-import org.springframework.beans.factory.annotation.Autowired;
+
+import java.util.Optional;
 
 
 public class ModifyFavouriteSteps {
-    @Autowired
-    private UserRepository userRepository;
+    //@Autowired
+    //private UserRepository userRepository;
     private PetRepository petRepository;
+    private StepDefs stepDefs;
     private Long petId;
     @Given("^I login as \"([^\"]*)\"$")
     public void iLoginAsWithPassword(String username) {
@@ -22,7 +23,7 @@ public class ModifyFavouriteSteps {
         AuthenticationStepDefs.currentUsername = username;
     }
     @When("^I press the favouritePet button for the pet with id \"([^\"]*)\"$")
-    public void iPressTheFavouriteButton(Long favouritedPet){
+    public void iPressTheFavouriteButton(Long favouritedPet) throws Throwable{
         //I'm not logged in case
         if (AuthenticationStepDefs.currentUsername == null){
             return;
@@ -39,11 +40,25 @@ public class ModifyFavouriteSteps {
         User[] userList = pet.getFavouritedBy();
         for (User value : userList) {
             assert user.getId() != null;
-            if (user.getId().equals(value.getId())) {
-                //remove entry
-            } else {
-                //create entry
-            }
+//            if (user.getId().equals(value.getId())) {
+//                stepDefs.mockMvc.perform(
+//                                delete("/favourites")
+//                                        .contentType(MediaType.APPLICATION_JSON)
+//                                        .content(stepDefs.mapper.writeValueAsString(user.getId()))
+//                                        .characterEncoding(StandardCharsets.UTF_8)
+//                                        .accept(MediaType.APPLICATION_JSON)
+//                                        .with(AuthenticationStepDefs.authenticate()))
+//                        .andDo(print());
+//            } else {
+//                stepDefs.mockMvc.perform(
+//                                post("/favourites")
+//                                        .contentType(MediaType.APPLICATION_JSON)
+//                                        .content(stepDefs.mapper.writeValueAsString(user.getId()))
+//                                        .characterEncoding(StandardCharsets.UTF_8)
+//                                        .accept(MediaType.APPLICATION_JSON)
+//                                        .with(AuthenticationStepDefs.authenticate()))
+//                        .andDo(print());
+//            }
         }
     }
     @And("The entry on the relation \"favourites\" is created")
@@ -58,9 +73,8 @@ public class ModifyFavouriteSteps {
 
     private boolean favouritedByUsers(){
         boolean found = false;
-        Pet pet = new Pet();
-        pet.setId(petId);
-        User[] userList = pet.getFavouritedBy();
+        Optional<Pet> pet = petRepository.findById(petId);
+        User[] userList = pet.get().getFavouritedBy();
         for (User user : userList) {
             if (AuthenticationStepDefs.currentUsername.equals(user.getId())) {
                 found = true;
