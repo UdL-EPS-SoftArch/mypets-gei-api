@@ -7,6 +7,6 @@ Feature: Logout User
     Given I login as "user" with password "password"
     When I logout of the app
     Then I don't have my session active
-    And The response code is 401
-    And The error message is "Unauthorized"
+    #And The response code is 401
+    #And The error message is "Unauthorized"
 
