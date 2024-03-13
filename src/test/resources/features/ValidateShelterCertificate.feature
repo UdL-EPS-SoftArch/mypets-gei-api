@@ -5,10 +5,11 @@ Feature: Validate ShelterCertificate
 
   Background: Exists a shelter with name "test"
     Given A shelter with name "test"
+    And An admin with username "admin" and password "admin"
 
   Scenario: Validating a correct shelter certificate
     Given a shelter certificate associated with a shelter with name "test" with valid information created by a shelter volunteer
-    Then the admin should verify the certificate validity associated with a shelter with name "test"
+    Then the admin with username "admin" and password "admin" should verify the certificate validity associated with a shelter with name "test"
     And the admin should approve the certificate associated to the shelter with name "test"
 
   Scenario: Validating a incorrect shelter certificate
