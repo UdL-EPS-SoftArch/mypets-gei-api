@@ -7,7 +7,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import cat.udl.eps.softarch.demo.domain.Admin;
 import cat.udl.eps.softarch.demo.domain.User;
+import cat.udl.eps.softarch.demo.repository.AdminRepository;
 import cat.udl.eps.softarch.demo.repository.UserRepository;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
@@ -26,6 +28,9 @@ public class RegisterStepDefs {
 
   @Autowired
   private UserRepository userRepository;
+
+  @Autowired
+  private AdminRepository adminRepository;
 
   @Given("^There is no registered user with username \"([^\"]*)\"$")
   public void thereIsNoRegisteredUserWithUsername(String user) {
@@ -46,6 +51,18 @@ public class RegisterStepDefs {
     }
   }
 
+
+  @Given("^There is a registered admin with username \"([^\"]*)\" and password \"([^\"]*)\" and email \"([^\"]*)\"$")
+  public void thereIsARegisteredAdminWithUsernameAndPasswordAndEmail(String username, String password, String email) {
+    if (!adminRepository.existsById(username)) {
+      Admin user = new Admin();
+      user.setEmail(email);
+      user.setId(username);
+      user.setPassword(password);
+      user.encodePassword();
+      userRepository.save(user);
+    }
+  }
   @And("^I can login with username \"([^\"]*)\" and password \"([^\"]*)\"$")
   public void iCanLoginWithUsernameAndPassword(String username, String password) throws Throwable {
     AuthenticationStepDefs.currentUsername = username;
