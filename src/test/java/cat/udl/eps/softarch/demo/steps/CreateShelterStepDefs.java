@@ -30,15 +30,6 @@ public class CreateShelterStepDefs {
     @Autowired
     private UserRepository userRepository;
 
-    @And("^I am a admin with name \"([^\"]*)\"$")
-    public void iAmAdmin(String name) {
-
-    }
-    @And("^I am a shelter volunteer with name \"([^\"]*)\"$")
-    public void iAmAShelterVolunteer(String name) {
-
-    }
-
     @Given("^There is a registered admin with name \"([^\"]*)\" and password \"([^\"]*)\" and email \"([^\"]*)\"$")
     public void thereIsARegisteredAdminWithNameAndPasswordAndEmail(String username, String password, String email) {
         if (!userRepository.existsById(username)) {
