@@ -15,16 +15,40 @@ Feature: Create Shelter
     And The error message is "Unauthorized"
     And There is 0 Shelter created
 
-  Scenario: Create a new shelter as Admin
-    Given There is no shelter registered with the name "shelter"
-    And I am a admin with name "adminName"
+  Scenario: Create shelter as Admin
+    Given I login as "admin" with password "password"
     When I create a shelter with a name "testShelter" email "testemail" and mobile "123456789"
     Then The response code is 201
 
-  Scenario: Create a new shelter as Shelter Volunteer
-    Given There is no shelter registered with the name "shelter"
-    And I am a shelter volunteer with name "shelterVolunteerName"
+  Scenario: Create shelter as Client
+    Given I login as "client" with password "password"
     When I create a shelter with a name "testShelter" email "testemail" and mobile "123456789"
-    Then The response code is 403
-    And The error message is "You are not authorized to create a shelter"
+    Then The response code is 401
+    And The error message is "Unauthorized"
+    And There is 0 Shelter created
 
+  Scenario: Create shelter with missing name
+    Given I login as "admin" with password "password"
+    When I create a shelter with a name "" email "testemail" and mobile "123456789"
+    Then The response code is 400
+    And There is 0 Shelter created
+
+    Scenario: Create shelter with missing email
+      Given I login as "admin" with password "password"
+      When I create a shelter with a name "testShelter" email "" and mobile "123456789"
+      Then The response code is 400
+      And There is 0 Shelter created
+
+    Scenario: Create shelter with missing mobile
+        Given I login as "admin" with password "password"
+        When I create a shelter with a name "testShelter" email "testemail" and mobile ""
+        Then The response code is 400
+        And There is 0 Shelter created
+
+    Scenario: Create a shelter that already exists:
+        Given I login as "admin" with password "password"
+        When I create a shelter with a name "testShelter" email "testemail" and mobile "123456789"
+        Then The response code is 400
+        When I create a shelter with a name "testShelter" email "testemail" and mobile "123456789"
+        Then The response code is 400
+        And There is 0 Shelter created

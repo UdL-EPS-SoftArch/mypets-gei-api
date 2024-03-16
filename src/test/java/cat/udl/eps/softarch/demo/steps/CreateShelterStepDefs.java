@@ -32,16 +32,23 @@ public class CreateShelterStepDefs {
 
     @And("^I am a admin with name \"([^\"]*)\"$")
     public void iAmAdmin(String name) {
-        //Admin admin = userRepository.findByName(name).get(0);
+
     }
     @And("^I am a shelter volunteer with name \"([^\"]*)\"$")
-    public void iAmAShelterVolunteer(User user) {
-        Assert.assertTrue("User should be a shelter volunteer",
-                user instanceof ShelterVolunteer);
-    }
-    @Given("^There is a registered admin with name \"([^\"]*)\" and password \"([^\"]*)\" and email \"([^\"]*)\"$")
-    public void thereIsARegisteredAdminWithNameAndPasswordAndEmail(String arg0, String arg1, String arg2) {
+    public void iAmAShelterVolunteer(String name) {
 
+    }
+
+    @Given("^There is a registered admin with name \"([^\"]*)\" and password \"([^\"]*)\" and email \"([^\"]*)\"$")
+    public void thereIsARegisteredAdminWithNameAndPasswordAndEmail(String username, String password, String email) {
+        if (!userRepository.existsById(username)) {
+            Admin user = new Admin();
+            user.setEmail(email);
+            user.setId(username);
+            user.setPassword(password);
+            user.encodePassword();
+            userRepository.save(user);
+        }
     }
 
     @When("^I create a shelter with a name \"([^\"]*)\" email \"([^\"]*)\" and mobile \"([^\"]*)\"$")
