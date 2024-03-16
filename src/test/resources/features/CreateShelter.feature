@@ -10,21 +10,21 @@ Feature: Create Shelter
 
   Scenario: Create a shelter without being logged in
     Given I'm not logged in
-    When I create a shelter with a name "testShelter""
+    When I create a shelter with a name "testShelter" email "testemail" and mobile "123456789"
     Then The response code is 401
     And The error message is "Unauthorized"
+    And There is 0 Shelter created
 
   Scenario: Create a new shelter as Admin
-    Given There is no shelter registered with the name "shelter" and location "city"
-    And I am a admin
-    When I create a new shelter with name "shelter" and location "city"
+    Given There is no shelter registered with the name "shelter"
+    And I am a admin with name "adminName"
+    When I create a shelter with a name "testShelter" email "testemail" and mobile "123456789"
     Then The response code is 201
-    And It has been created a user with username "shelter" and location "city", the password is not returned
 
   Scenario: Create a new shelter as Shelter Volunteer
-    Given There is no shelter registered with the name "shelter" and location "city"
-    And I am a shelter volunteer
-    When I create a new shelter with name "shelter" and location "city"
+    Given There is no shelter registered with the name "shelter"
+    And I am a shelter volunteer with name "shelterVolunteerName"
+    When I create a shelter with a name "testShelter" email "testemail" and mobile "123456789"
     Then The response code is 403
-    And The response is "You are not authorized to create a shelter"
+    And The error message is "You are not authorized to create a shelter"
 
