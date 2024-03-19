@@ -17,10 +17,8 @@ public class Favourite extends UriEntity<Long>{
     Long id;
 
     @ManyToOne
-    @JoinColumn(name = "id")
     Pet pet;
 
     @ManyToOne
-    @JoinColumn(name = "id")
     User user;
 }
