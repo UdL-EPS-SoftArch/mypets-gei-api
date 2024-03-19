@@ -15,6 +15,8 @@ public class Favourite extends UriEntity<Long> {
     @GeneratedValue
     Long id;
 
+    String test;
+
     @ManyToOne
     Pet pet;
 
