@@ -8,8 +8,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import cat.udl.eps.softarch.demo.domain.Admin;
+import cat.udl.eps.softarch.demo.domain.ShelterVolunteer;
 import cat.udl.eps.softarch.demo.domain.User;
 import cat.udl.eps.softarch.demo.repository.AdminRepository;
+import cat.udl.eps.softarch.demo.repository.ShelterRepository;
+import cat.udl.eps.softarch.demo.repository.ShelterVolunteerRepository;
 import cat.udl.eps.softarch.demo.repository.UserRepository;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
@@ -31,6 +34,9 @@ public class RegisterStepDefs {
 
   @Autowired
   private AdminRepository adminRepository;
+
+  @Autowired
+  private ShelterVolunteerRepository shelterVolunteerRepository;
 
   @Given("^There is no registered user with username \"([^\"]*)\"$")
   public void thereIsNoRegisteredUserWithUsername(String user) {
@@ -63,6 +69,19 @@ public class RegisterStepDefs {
       userRepository.save(user);
     }
   }
+
+  @Given("^There is a registered shelter volunteer with username \"([^\"]*)\" and password \"([^\"]*)\" and email \"([^\"]*)\"$")
+  public void thereIsARegisteredShelterVolunteerWithUsernameAndPasswordAndEmail(String username, String password, String email) {
+    if (!shelterVolunteerRepository.existsById(username)) {
+      ShelterVolunteer user = new ShelterVolunteer();
+      user.setEmail(email);
+      user.setId(username);
+      user.setPassword(password);
+      user.encodePassword();
+      userRepository.save(user);
+    }
+  }
+
   @And("^I can login with username \"([^\"]*)\" and password \"([^\"]*)\"$")
   public void iCanLoginWithUsernameAndPassword(String username, String password) throws Throwable {
     AuthenticationStepDefs.currentUsername = username;

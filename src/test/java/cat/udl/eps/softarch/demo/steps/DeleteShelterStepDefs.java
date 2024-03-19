@@ -30,14 +30,6 @@ public class DeleteShelterStepDefs {
     @Autowired
     private ShelterRepository shelterRepository;
 
-    @Autowired
-    private AdminRepository adminRepository;
-
-    @When("I try to delete Shelter with id {int}")
-    public void iTryToDeleteShelterWith(int arg0) {
-        Optional<Shelter> shelter = shelterRepository.findById((long) arg0);
-
-    }
 
     @Given("There is a created shelter with name {string}, email {string} and phone {string}")
     public void thereIsACreatedShelterWithNameEmailAndPhone(String name, String email, String phone) {

@@ -5,6 +5,7 @@ Feature: Delete Shelter
   Background:
     Given There is a registered user with username "user" and password "password" and email "user@sample.app"
     Given There is a registered admin with username "admin" and password "password" and email "admin@sample.app"
+    Given There is a registered shelter volunteer with username "ShelterVolunteer" and password "password" and email "shelterv@sample.app"
     Given There is a created shelter with name "name", email "shelter@sample.com" and phone "123123123"
 
 
@@ -35,7 +36,7 @@ Feature: Delete Shelter
 
   Scenario: Delete a Shelter that does not exist as admin
     Given I login as "admin" with password "password"
-    When I try to delete Shelter with name "name"
+    When I try to delete Shelter with name "unregistered"
     Then The response code is 404
 
   Scenario: Delete a Shelter not logged in
