@@ -12,15 +12,13 @@ import org.springframework.data.annotation.Id;
 @Entity
 @Data
 public class Favourite extends UriEntity<Long>{
-    @Id
     @GeneratedValue
+    @Id
     Long id;
 
     @ManyToOne
-    @JoinColumn(name = "id")
     Pet pet;
 
     @ManyToOne
-    @JoinColumn(name = "id")
     User user;
 }
