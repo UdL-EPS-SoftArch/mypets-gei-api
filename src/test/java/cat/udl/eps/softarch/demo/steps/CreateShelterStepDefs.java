@@ -7,6 +7,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import cat.udl.eps.softarch.demo.domain.*;
+import cat.udl.eps.softarch.demo.repository.AdminRepository;
 import cat.udl.eps.softarch.demo.repository.ShelterRepository;
 import cat.udl.eps.softarch.demo.repository.UserRepository;
 import io.cucumber.java.en.And;
@@ -19,6 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 
 import java.nio.charset.StandardCharsets;
+import java.time.ZonedDateTime;
 
 public class CreateShelterStepDefs {
     @Autowired
@@ -30,6 +32,9 @@ public class CreateShelterStepDefs {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private AdminRepository adminRepository;
+
     @Given("^There is a registered admin with name \"([^\"]*)\" and password \"([^\"]*)\" and email \"([^\"]*)\"$")
     public void thereIsARegisteredAdminWithNameAndPasswordAndEmail(String username, String password, String email) {
         if (!userRepository.existsById(username)) {
@@ -38,25 +43,27 @@ public class CreateShelterStepDefs {
             user.setId(username);
             user.setPassword(password);
             user.encodePassword();
-            userRepository.save(user);
+            adminRepository.save(user);
         }
     }
 
-    @When("^I create a shelter with a name \"([^\"]*)\" email \"([^\"]*)\" and mobile \"([^\"]*)\"$")
-    public void iCreateAShelterWithAName(String name, String email, String mobile) throws Throwable {
+    @When("^I create a shelter with a name \"([^\"]*)\", email \"([^\"]*)\" and phone \"([^\"]*)\" and location \"([^\"]*)\"$")
+    public void iCreateAShelterWithAName(String name, String email, String mobile, String location) throws Throwable {;
         Shelter newshelter = new Shelter();
         newshelter.setName(name);
         newshelter.setEmail(email);
         newshelter.setMobile(mobile);
+        newshelter.setCreatedAt(ZonedDateTime.now());
+        newshelter.setUpdatedAt(ZonedDateTime.now());
         //Following code is doing a post request to /shelters storing the response in stepDefs.result to test REST functionalty
         stepDefs.result = stepDefs.mockMvc.perform(
                 post("/shelters")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(stepDefs.mapper.writeValueAsString(newshelter))
                         .characterEncoding(StandardCharsets.UTF_8)
-                        .accept(MediaType.APPLICATION_JSON)
                         .with(AuthenticationStepDefs.authenticate()))
                 .andDo(print());
+
     }
 
     @And("^There is (\\d+) Shelter created$")

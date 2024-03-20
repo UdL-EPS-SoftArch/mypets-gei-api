@@ -10,45 +10,51 @@ Feature: Create Shelter
 
   Scenario: Create a shelter without being logged in
     Given I'm not logged in
-    When I create a shelter with a name "testShelter" email "testemail" and mobile "123456789"
+    When I create a shelter with a name "name", email "shelter@sample.app" and phone "123123123" and location "location"
     Then The response code is 401
     And The error message is "Unauthorized"
     And There is 0 Shelter created
 
   Scenario: Create shelter as Admin
     Given I login as "admin" with password "password"
-    When I create a shelter with a name "testShelter" email "testemail" and mobile "123456789"
+    When I create a shelter with a name "name", email "shelter@sample.app" and phone "123123123" and location "location"
     Then The response code is 201
 
   Scenario: Create shelter as Client
     Given I login as "client" with password "password"
-    When I create a shelter with a name "testShelter" email "testemail" and mobile "123456789"
+    When I create a shelter with a name "name", email "shelter@sample.app" and phone "123123123" and location "location"
     Then The response code is 401
     And The error message is "Unauthorized"
     And There is 0 Shelter created
 
   Scenario: Create shelter with missing name
     Given I login as "admin" with password "password"
-    When I create a shelter with a name "" email "testemail" and mobile "123456789"
+    When I create a shelter with a name "", email "shelter@sample.app" and phone "123123123" and location "location"
     Then The response code is 400
     And There is 0 Shelter created
 
     Scenario: Create shelter with missing email
       Given I login as "admin" with password "password"
-      When I create a shelter with a name "testShelter" email "" and mobile "123456789"
+      When I create a shelter with a name "name", email "" and phone "123123123" and location "location"
       Then The response code is 400
       And There is 0 Shelter created
 
     Scenario: Create shelter with missing mobile
         Given I login as "admin" with password "password"
-        When I create a shelter with a name "testShelter" email "testemail" and mobile ""
+        When I create a shelter with a name "name", email "shelter@sample.app" and phone "" and location "location"
         Then The response code is 400
         And There is 0 Shelter created
 
     Scenario: Create a shelter that already exists:
         Given I login as "admin" with password "password"
-        When I create a shelter with a name "testShelter" email "testemail" and mobile "123456789"
-        Then The response code is 400
-        When I create a shelter with a name "testShelter" email "testemail" and mobile "123456789"
-        Then The response code is 400
+        When I create a shelter with a name "name", email "shelter@sample.app" and phone "123123123" and location "location"
+        Then The response code is 201
+        When I create a shelter with a name "name", email "shelter@sample.app" and phone "123123123" and location "location"
+        Then The response code is 409
+        And There is 1 Shelter created
+
+    Scenario: Create a shelter with invalid email
+        Given I login as "admin" with password "password"
+        When I create a shelter with a name "name", email "shelter@sample" and phone "123123123" and location "location"
+        Then The response code is 500
         And There is 0 Shelter created
