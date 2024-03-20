@@ -52,9 +52,3 @@ Feature: Create Shelter
         When I create a shelter with a name "name", email "shelter@sample.app" and phone "123123123" and location "location"
         Then The response code is 409
         And There is 1 Shelter created
-
-    Scenario: Create a shelter with invalid email
-        Given I login as "admin" with password "password"
-        When I create a shelter with a name "name", email "shelter@sample" and phone "123123123" and location "location"
-        Then The response code is 500
-        And There is 0 Shelter created

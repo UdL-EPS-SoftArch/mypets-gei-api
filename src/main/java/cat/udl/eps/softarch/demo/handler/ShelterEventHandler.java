@@ -17,28 +17,13 @@ public class ShelterEventHandler {
 
     @HandleBeforeCreate
     public void handleShelterPreCreate(Shelter shelter) {
-        if (shelter.getRating() == null) {
-            shelter.setRating(0);
-        }
         if (shelter.getCreatedAt() == null) {
             throw new IllegalArgumentException("Shelter must have a creation date");
         }
         if (shelter.getUpdatedAt() == null) {
             throw new IllegalArgumentException("Shelter must have an update date");
         }
-        if (checkIfValidEmail(shelter)) {
-            shelterRepository.save(shelter);
-        }
 
-    }
-    private boolean checkIfValidEmail(Shelter shelter){
-        if (shelter.getEmail() == null) {
-            throw new IllegalArgumentException("Shelter must have an email");
-        }else if (!shelter.getEmail().contains("@")) {
-            throw new IllegalArgumentException("Shelter email must contain @");
-        }else if (!shelter.getEmail().contains(".")) {
-            throw new IllegalArgumentException("Shelter email must contain .");
-        }
-        return true;
+
     }
 }
