@@ -36,14 +36,21 @@ public class CreateShelterStepDefs {
     private AdminRepository adminRepository;
 
     @Given("^There is a registered admin with name \"([^\"]*)\" and password \"([^\"]*)\" and email \"([^\"]*)\"$")
-    public void thereIsARegisteredAdminWithNameAndPasswordAndEmail(String username, String password, String email) {
+    public void thereIsARegisteredAdminWithNameAndPasswordAndEmail(String username, String password, String email) throws Throwable {
         if (!userRepository.existsById(username)) {
             Admin user = new Admin();
             user.setEmail(email);
             user.setId(username);
             user.setPassword(password);
             user.encodePassword();
-            adminRepository.save(user);
+            userRepository.save(user);
+            stepDefs.result = stepDefs.mockMvc.perform(
+                            post("/admins")
+                                    .contentType(MediaType.APPLICATION_JSON)
+                                    .content(stepDefs.mapper.writeValueAsString(user))
+                                    .characterEncoding(StandardCharsets.UTF_8)
+                                    .with(AuthenticationStepDefs.authenticate()))
+                    .andDo(print());
         }
     }
 
