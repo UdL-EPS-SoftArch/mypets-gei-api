@@ -78,4 +78,5 @@ public class User extends UriEntity<String> implements UserDetails {
 
 	@ManyToMany
 	public Pet[] favouritedPets;
+
 }
