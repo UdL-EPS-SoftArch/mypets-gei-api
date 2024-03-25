@@ -33,6 +33,7 @@ public class WebSecurityConfig {
                 .requestMatchers(HttpMethod.POST, "/**/*").authenticated()
                 .requestMatchers(HttpMethod.PUT, "/**/*").authenticated()
                 .requestMatchers(HttpMethod.PATCH, "/**/*").authenticated()
+                        .requestMatchers(HttpMethod.DELETE, "/shelters/*").hasRole("ADMIN")
                 .requestMatchers(HttpMethod.DELETE, "/**/*").authenticated()
                 .anyRequest().permitAll())
             .csrf((csrf) -> csrf.disable())
