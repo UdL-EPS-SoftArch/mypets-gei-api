@@ -8,6 +8,8 @@ import io.cucumber.java.en.And;
 import io.cucumber.java.en.When;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.List;
+
 public class EditShelterStepDefs {
 
     @Autowired
@@ -30,6 +32,9 @@ public class EditShelterStepDefs {
 
     @And("^I am shelter volunteer with name \"([^\"]*)\"$")
     public void iAmShelterVolunteer(String name) {
-        user = userRepository.findById(name);
+
+        //user = userRepository.findById(name);
     }
+
+
 }
