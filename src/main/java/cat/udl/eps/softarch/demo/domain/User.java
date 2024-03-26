@@ -17,6 +17,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.Collection;
+import java.util.List;
 
 @Entity
 @Table(name = "DemoUser") //Avoid collision with system table User
@@ -76,7 +77,7 @@ public class User extends UriEntity<String> implements UserDetails {
 		return true;
 	}
 
-//	@ManyToMany
-//	public Pet[] favouritedPets;
+	@ManyToMany
+	public List<Pet> favouritedPets;
 
 }
