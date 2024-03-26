@@ -6,6 +6,7 @@ Feature: Create Shelter
   Background:
     Given There is a registered user with username "user" and password "password" and email "user@sample.app"
     Given There is a registered admin with name "admin" and password "password" and email "admin@sample.app"
+    Given There is a registered volunteer with name "volunteer" and password "password" and email "volunteer@sample.app"
 
 
   Scenario: Create a shelter without being logged in
@@ -19,6 +20,13 @@ Feature: Create Shelter
     Given I login as "admin" with password "password"
     When I create a shelter with a name "name", email "shelter@sample.app" and phone "123123123" and location "location"
     Then The response code is 201
+
+  #Scenario: Create shelter as Volunteer
+   # Given I login as "volunteer" with password "password"
+   # When I create a shelter with a name "name", email "shelter@sample.app" and phone "123123123" and location "location"
+   # Then The response code is 401
+   # And The error message is "Unauthorized"
+   # And There is 0 Shelter created
 
   Scenario: Create shelter as Client
     Given I login as "client" with password "password"

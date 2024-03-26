@@ -9,6 +9,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import cat.udl.eps.softarch.demo.domain.*;
 import cat.udl.eps.softarch.demo.repository.AdminRepository;
 import cat.udl.eps.softarch.demo.repository.ShelterRepository;
+import cat.udl.eps.softarch.demo.repository.ShelterVolunteerRepository;
 import cat.udl.eps.softarch.demo.repository.UserRepository;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
@@ -33,24 +34,21 @@ public class CreateShelterStepDefs {
     private UserRepository userRepository;
 
     @Autowired
+    private ShelterVolunteerRepository ShelterVolunteerRepository;
+
+    @Autowired
     private AdminRepository adminRepository;
 
     @Given("^There is a registered admin with name \"([^\"]*)\" and password \"([^\"]*)\" and email \"([^\"]*)\"$")
     public void thereIsARegisteredAdminWithNameAndPasswordAndEmail(String username, String password, String email) throws Throwable {
-        if (!userRepository.existsById(username)) {
+        if (!adminRepository.existsById(username)) {
             Admin user = new Admin();
             user.setEmail(email);
             user.setId(username);
             user.setPassword(password);
             user.encodePassword();
-            userRepository.save(user);
-            stepDefs.result = stepDefs.mockMvc.perform(
-                            post("/admins")
-                                    .contentType(MediaType.APPLICATION_JSON)
-                                    .content(stepDefs.mapper.writeValueAsString(user))
-                                    .characterEncoding(StandardCharsets.UTF_8)
-                                    .with(AuthenticationStepDefs.authenticate()))
-                    .andDo(print());
+            adminRepository.save(user);
+
         }
     }
 
@@ -82,5 +80,17 @@ public class CreateShelterStepDefs {
     public void thereIsNoShelterRegisteredWithTheName(String name) {
         Assert.assertTrue("Shelter with name \""
                         + name + "\" shouldn't exist", shelterRepository.findByName(name).isEmpty());
+    }
+
+    @Given("^There is a registered volunteer with name \"([^\"]*)\" and password \"([^\"]*)\" and email \"([^\"]*)\"$")
+    public void thereIsARegisteredVolunteerWithNameAndPasswordAndEmail(String name, String password, String email) {
+        if(!ShelterVolunteerRepository.existsById(name)) {
+            ShelterVolunteer user = new ShelterVolunteer();
+            user.setEmail(email);
+            user.setId(name);
+            user.setPassword(password);
+            user.encodePassword();
+            ShelterVolunteerRepository.save(user);
+        }
     }
 }
