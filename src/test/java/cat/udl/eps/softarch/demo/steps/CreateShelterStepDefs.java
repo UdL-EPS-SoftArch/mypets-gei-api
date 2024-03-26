@@ -85,12 +85,12 @@ public class CreateShelterStepDefs {
     @Given("^There is a registered volunteer with name \"([^\"]*)\" and password \"([^\"]*)\" and email \"([^\"]*)\"$")
     public void thereIsARegisteredVolunteerWithNameAndPasswordAndEmail(String name, String password, String email) {
         if(!ShelterVolunteerRepository.existsById(name)) {
-            ShelterVolunteer user = new ShelterVolunteer();
-            user.setEmail(email);
-            user.setId(name);
-            user.setPassword(password);
-            user.encodePassword();
-            ShelterVolunteerRepository.save(user);
+            ShelterVolunteer volunteer = new ShelterVolunteer();
+            volunteer.setEmail(email);
+            volunteer.setId(name);
+            volunteer.setPassword(password);
+            volunteer.encodePassword();
+            ShelterVolunteerRepository.save(volunteer);
         }
     }
 }

@@ -21,12 +21,12 @@ Feature: Create Shelter
     When I create a shelter with a name "name", email "shelter@sample.app" and phone "123123123" and location "location"
     Then The response code is 201
 
-  #Scenario: Create shelter as Volunteer
-   # Given I login as "volunteer" with password "password"
-   # When I create a shelter with a name "name", email "shelter@sample.app" and phone "123123123" and location "location"
-   # Then The response code is 401
-   # And The error message is "Unauthorized"
-   # And There is 0 Shelter created
+  Scenario: Create shelter as Volunteer
+    Given I login as "volunteer" with password "password"
+    When I create a shelter with a name "name", email "shelter@sample.app" and phone "123123123" and location "location"
+    Then The response code is 403
+    And The error message is "Forbidden"
+    And There is 0 Shelter created
 
   Scenario: Create shelter as Client
     Given I login as "client" with password "password"
