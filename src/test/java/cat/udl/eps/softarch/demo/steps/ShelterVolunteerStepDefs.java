@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 
 import java.util.Optional;
@@ -38,13 +39,17 @@ public class ShelterVolunteerStepDefs {
 
     @When("I kick user \"([^\"]*)\" from shelter \"([^\"]*)\"$")
     public void iKickUserFromShelter(String username, String shelterName) throws Exception {
-        Optional<ShelterVolunteer> optionalVolunteer = shelterVolunteerRepository.findById(username);
+
+        ShelterVolunteer volunteer = shelterVolunteerRepository.findById(username).orElse(null);
+
+        assert volunteer != null;
         stepDefs.result = stepDefs.mockMvc.perform(
-                delete("/shelterVolunteer/{id}", optionalVolunteer.isPresent() ? optionalVolunteer.get().getId() : -1)
+                delete("/shelterVolunteers/{id}", volunteer.getId())
                         .characterEncoding("utf-8")
                         .accept(MediaType.APPLICATION_JSON)
                         .with(AuthenticationStepDefs.authenticate())
         ).andDo(print());
+
 
     }
 }
