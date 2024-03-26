@@ -26,14 +26,17 @@ public class ShelterVolunteerStepDefs {
     ShelterRepository shelterRepository;
 
 
-    @And("There is a shelter volunteer with username \"([^\"]*)\" in the shelter \"([^\"]*)\"$")
-    public void thereIsAShelterVolunteerWithUsernameInTheShelter(String username, String shelterName) {
-        ShelterVolunteer volunteer = new ShelterVolunteer();
-        volunteer.setUserShelter(shelterRepository.findByName(shelterName).get(0));
-        volunteer.setId(username);
-        volunteer.setEmail("volunteeer@volunteer.com");
-        volunteer.setPassword("12345678");
-        shelterVolunteerRepository.save(volunteer);
+    @And("There is a shelter volunteer with username \"([^\"]*)\" and password \"([^\"]*)\" in the shelter \"([^\"]*)\"$")
+    public void thereIsAShelterVolunteerWithUsernameInTheShelter(String username, String password, String shelterName) {
+        if (!shelterVolunteerRepository.existsById(username)) {
+            ShelterVolunteer volunteer = new ShelterVolunteer();
+            volunteer.setUserShelter(shelterRepository.findByName(shelterName).get(0));
+            volunteer.setId(username);
+            volunteer.setEmail(username + "@volunteer");
+            volunteer.setPassword(password);
+            volunteer.encodePassword();
+            shelterVolunteerRepository.save(volunteer);
+        }
 
     }
 
