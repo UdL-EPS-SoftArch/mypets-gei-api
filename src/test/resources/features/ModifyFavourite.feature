@@ -3,6 +3,10 @@ Feature: Modify Favourite
   As a user
   I want to mark or unmark a pet as favourite
 
+  Background:
+    Given There is a registered user with username "testuser" and password "password" and email "user@sample.app"
+    Given There is a registered pet with id "12345678"
+
   Scenario: Mark as favourite
     Given I login as "testuser"
     When I press the favouritePet button for the pet with id "12345678"
