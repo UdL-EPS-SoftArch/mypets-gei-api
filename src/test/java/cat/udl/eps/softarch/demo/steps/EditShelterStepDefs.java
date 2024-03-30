@@ -26,15 +26,9 @@ public class EditShelterStepDefs {
         shelterRepository.save(shelter);
     }
 
-    @When("^I update the shelter with name \"([^\"]*)\" to name \"([^\"]*)\" email \"([^\"]*)\" and mobile \"([^\"]*)\"$")
-    public void iUpdateTheShelterWithNameToNameEmailAndMobile(String PrevName, String NewName, String email, String mobile) {
-    }
 
-    @And("^I am shelter volunteer with name \"([^\"]*)\"$")
-    public void iAmShelterVolunteer(String name) {
 
-        //user = userRepository.findById(name);
-    }
+
 
 
 }
