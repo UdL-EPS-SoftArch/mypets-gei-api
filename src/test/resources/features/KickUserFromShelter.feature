@@ -35,4 +35,4 @@ Feature: Kick ShelterVolunteer from Shelter
     Then The response code is 200
     And There is a shelter volunteer with username "volunteer" and password "pass" in the shelter "shelter"
     When I kick user "volunteer" from shelter "shelter"
-    Then The response code is 200
+    Then The response code is 412

@@ -2,6 +2,7 @@ package cat.udl.eps.softarch.demo.handler;
 import cat.udl.eps.softarch.demo.domain.Shelter;
 import cat.udl.eps.softarch.demo.domain.ShelterVolunteer;
 import cat.udl.eps.softarch.demo.domain.User;
+import cat.udl.eps.softarch.demo.exceptions.VolunteerFromDifferentShelter;
 import cat.udl.eps.softarch.demo.repository.ShelterVolunteerRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
