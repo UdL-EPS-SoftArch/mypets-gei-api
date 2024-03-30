@@ -20,12 +20,7 @@ import java.util.Collection;
 @Entity
 public class ShelterVolunteer extends User {
 
-    @Override
-    @JsonValue(value = false)
-    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return AuthorityUtils.commaSeparatedStringToAuthorityList("ROLE_VOLUNTEER");
-    }
+
 
     @JsonIdentityReference(alwaysAsId = true)
     @ManyToOne
