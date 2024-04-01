@@ -77,7 +77,11 @@ public class User extends UriEntity<String> implements UserDetails {
 		return true;
 	}
 
-	@ManyToMany
+	@ManyToMany(fetch = FetchType.EAGER)
+	@JoinTable(
+			name = "favourited_pets",
+			joinColumns = @JoinColumn(name = "pet_id"),
+			inverseJoinColumns = @JoinColumn(name = "user_id"))
 	public List<Pet> favouritedPets;
 
 }

@@ -3,6 +3,7 @@ package cat.udl.eps.softarch.demo.domain;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -11,6 +12,7 @@ import lombok.EqualsAndHashCode;
 @Data
 public class Pet extends UriEntity<Long> {
     @Id
+    @NotNull
     Long id;
 
     String name;

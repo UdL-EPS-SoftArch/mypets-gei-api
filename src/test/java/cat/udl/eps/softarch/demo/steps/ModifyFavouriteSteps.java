@@ -9,6 +9,7 @@ import io.cucumber.java.en.Given;
 import io.cucumber.java.en.When;
 import org.junit.Assert;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.http.MediaType;
 
 import java.nio.charset.StandardCharsets;
@@ -19,7 +20,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 
-
+@WebMvcTest
 public class ModifyFavouriteSteps {
     @Autowired
     private UserRepository userRepository;
@@ -29,17 +30,36 @@ public class ModifyFavouriteSteps {
     private StepDefs stepDefs;
     private Long petId;
 
-    @Given("^There is a registered pet with id \"([^\"]*)\"")
-    public void thereIsARegisteredPetWithId(Long id) {
-        if (!petRepository.existsById(id)) {
+    @Given("^There are two registered pets with ids \"([^\"]*)\" and \"([^\"]*)\"$")
+    public void thereAreRegisteredPetsWithIds(Long petToCreate, Long petToFavourite) {
+        if (!petRepository.existsById(petToCreate)) {
             Pet pet = new Pet();
-            pet.setId(id);
+            pet.setId(petToCreate);
             petRepository.save(pet);
+        }
+        if (!petRepository.existsById(petToFavourite)) {
+            Pet pet = new Pet();
+            pet.setId(petToFavourite);
+            petRepository.save(pet);
+
         }
     }
 
+    @Given("^User \"([^\"]*)\" has pet \"([^\"]*)\" set as favourite$")
+    public void userHasPetSetAsFavourite(String userId, Long petId) throws Throwable {
+        Pet newPet = new Pet();
+        newPet.setId(petId);
+        stepDefs.result =stepDefs.mockMvc.perform(
+                        post(String.format("/%s/favouritedPets",userId))
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(stepDefs.mapper.writeValueAsString(newPet))
+                                .characterEncoding(StandardCharsets.UTF_8)
+                                .with(AuthenticationStepDefs.authenticate()))
+                .andDo(print());
+    }
+
     @Given("^I login as \"([^\"]*)\"$")
-    public void iLoginAsWithPassword(String username) {
+    public void iLoginAs(String username) {
         //Only need username to look for user's id later
         AuthenticationStepDefs.currentUsername = username;
     }
@@ -57,19 +77,28 @@ public class ModifyFavouriteSteps {
         Optional<User> user = userRepository.findById(AuthenticationStepDefs.currentUsername);
         List<Pet> petList = user.get().favouritedPets;
         boolean found = false;
+        System.out.println("Size of petList (mid):");
+        System.out.println(petList.size());
 
         if (!petList.isEmpty()) {
             for (Pet value : petList) {
                 if (favouritedPet.equals(value.getId())) {
                     found = true;
-                    stepDefs.mockMvc.perform(delete(String.format("/favouritedPets/%s", favouritedPet)));
+                    stepDefs.result = stepDefs.mockMvc.perform(
+                            delete(String.format("/%s/favouritedPets",AuthenticationStepDefs.currentUsername)));
                 }
             }
         }
         if (!found) {
             Pet newPet = new Pet();
             newPet.setId(favouritedPet);
-            stepDefs.mockMvc.perform(post(String.format("/favouritedPets/%s", favouritedPet)).contentType(MediaType.APPLICATION_JSON).content(stepDefs.mapper.writeValueAsString(newPet)).characterEncoding(StandardCharsets.UTF_8).with(AuthenticationStepDefs.authenticate())).andDo(print());
+            stepDefs.result =stepDefs.mockMvc.perform(
+                    post(String.format("/%s/favouritedPets",AuthenticationStepDefs.currentUsername))
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(stepDefs.mapper.writeValueAsString(newPet))
+                            .characterEncoding(StandardCharsets.UTF_8)
+                            .with(AuthenticationStepDefs.authenticate()))
+                    .andDo(print());
         }
     }
 
@@ -87,6 +116,8 @@ public class ModifyFavouriteSteps {
         Optional<User> user = userRepository.findById(AuthenticationStepDefs.currentUsername);
         List<Pet> petList = user.get().favouritedPets;
         boolean found = false;
+        System.out.println("Size of petList (last step):");
+        System.out.println(petList.size());
         for (Pet value : petList) {
             if (petId.equals(value.getId())) {
                 found = true;
