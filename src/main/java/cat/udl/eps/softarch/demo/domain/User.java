@@ -77,7 +77,7 @@ public class User extends UriEntity<String> implements UserDetails {
 		return true;
 	}
 
-	@ManyToMany
-	public List<Pet> favouritedPets;
+	@OneToMany
+	public List<FavouritedPets> favouritedPets;
 
 }
