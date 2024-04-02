@@ -7,7 +7,12 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import cat.udl.eps.softarch.demo.domain.Admin;
+import cat.udl.eps.softarch.demo.domain.ShelterVolunteer;
 import cat.udl.eps.softarch.demo.domain.User;
+import cat.udl.eps.softarch.demo.repository.AdminRepository;
+import cat.udl.eps.softarch.demo.repository.ShelterRepository;
+import cat.udl.eps.softarch.demo.repository.ShelterVolunteerRepository;
 import cat.udl.eps.softarch.demo.repository.UserRepository;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
@@ -27,6 +32,12 @@ public class RegisterStepDefs {
   @Autowired
   private UserRepository userRepository;
 
+  @Autowired
+  private AdminRepository adminRepository;
+
+  @Autowired
+  private ShelterVolunteerRepository shelterVolunteerRepository;
+
   @Given("^There is no registered user with username \"([^\"]*)\"$")
   public void thereIsNoRegisteredUserWithUsername(String user) {
     Assert.assertFalse("User \""
@@ -38,6 +49,31 @@ public class RegisterStepDefs {
   public void thereIsARegisteredUserWithUsernameAndPasswordAndEmail(String username, String password, String email) {
     if (!userRepository.existsById(username)) {
       User user = new User();
+      user.setEmail(email);
+      user.setId(username);
+      user.setPassword(password);
+      user.encodePassword();
+      userRepository.save(user);
+    }
+  }
+
+
+  @Given("^There is a registered admin with username \"([^\"]*)\" and password \"([^\"]*)\" and email \"([^\"]*)\"$")
+  public void thereIsARegisteredAdminWithUsernameAndPasswordAndEmail(String username, String password, String email) {
+    if (!adminRepository.existsById(username)) {
+      Admin user = new Admin();
+      user.setEmail(email);
+      user.setId(username);
+      user.setPassword(password);
+      user.encodePassword();
+      userRepository.save(user);
+    }
+  }
+
+  @Given("^There is a registered shelter volunteer with username \"([^\"]*)\" and password \"([^\"]*)\" and email \"([^\"]*)\"$")
+  public void thereIsARegisteredShelterVolunteerWithUsernameAndPasswordAndEmail(String username, String password, String email) {
+    if (!shelterVolunteerRepository.existsById(username)) {
+      ShelterVolunteer user = new ShelterVolunteer();
       user.setEmail(email);
       user.setId(username);
       user.setPassword(password);
