@@ -4,11 +4,10 @@ import cat.udl.eps.softarch.demo.domain.ShelterVolunteer;
 import cat.udl.eps.softarch.demo.domain.User;
 import cat.udl.eps.softarch.demo.exceptions.VolunteerFromDifferentShelter;
 import cat.udl.eps.softarch.demo.repository.ShelterVolunteerRepository;
+import cat.udl.eps.softarch.demo.repository.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.data.rest.core.annotation.HandleBeforeCreate;
-import org.springframework.data.rest.core.annotation.HandleBeforeDelete;
-import org.springframework.data.rest.core.annotation.RepositoryEventHandler;
+import org.springframework.data.rest.core.annotation.*;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
@@ -22,9 +21,11 @@ public class ShelterVolunteerEventHandler {
     final Logger logger = LoggerFactory.getLogger(ShelterVolunteerEventHandler.class);
 
     final ShelterVolunteerRepository shelterVolunteerRepository;
+    final UserRepository userRepository;
 
-    public ShelterVolunteerEventHandler(ShelterVolunteerRepository shelterVolunteerRepository) {
+    public ShelterVolunteerEventHandler(ShelterVolunteerRepository shelterVolunteerRepository,UserRepository userRepository) {
         this.shelterVolunteerRepository = shelterVolunteerRepository;
+        this.userRepository = userRepository;
     }
 
     @HandleBeforeDelete
@@ -38,5 +39,12 @@ public class ShelterVolunteerEventHandler {
         else throw new VolunteerFromDifferentShelter();
 
         // Do something with the username, like associating it with the created user
+    }
+    @HandleAfterDelete
+    public void handleShelterVolunteerPostCreate(ShelterVolunteer volunteer) {
+        logger.info("After deleting: {}", volunteer.toString());
+
+        shelterVolunteerRepository.delete(volunteer);
+        userRepository.delete(volunteer);
     }
 }

@@ -12,11 +12,14 @@ Feature: Kick ShelterVolunteer from Shelter
     And There is a shelter volunteer with username "volunteer2" and password "pass" in the shelter "shelter2"
 
   Scenario: Kick volunteer from shelter
-    And I can login with username "volunteer" and password "pass"
-    Then The response code is 200
+    Given I can login with username "volunteer" and password "pass"
+    And The response code is 200
     And There is a shelter volunteer with username "volunteer1" and password "pass" in the shelter "shelter"
     When I kick user "volunteer1" from shelter "shelter"
     Then The response code is 200
+    And I cannot login with username "volunteer1" and password "pass"
+    And The response code is 200
+
 
   Scenario: Kick volunteer from shelter as user
 
@@ -34,3 +37,5 @@ Feature: Kick ShelterVolunteer from Shelter
     And There is a shelter volunteer with username "volunteer" and password "pass" in the shelter "shelter"
     When I kick user "volunteer2" from shelter "shelter"
     Then The response code is 412
+    And I can login with username "volunteer2" and password "pass"
+    And The response code is 401
