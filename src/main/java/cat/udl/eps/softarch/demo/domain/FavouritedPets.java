@@ -1,21 +1,19 @@
 package cat.udl.eps.softarch.demo.domain;
 
 import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.ManyToOne;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import org.springframework.data.annotation.Id;
+import jakarta.persistence.Id;
 
 @EqualsAndHashCode(callSuper = true)
 @Entity
 @Data
-public class Favourite extends UriEntity<Long> {
+public class FavouritedPets extends UriEntity<Long> {
     @Id
-    @GeneratedValue
+    @NotNull
     Long id;
-
-    String test;
 
     @ManyToOne
     Pet pet;
