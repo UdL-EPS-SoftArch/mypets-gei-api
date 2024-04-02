@@ -84,7 +84,9 @@ public class EditShelterStepDefs {
 
     @And("^I get the shelter with name \"([^\"]*)\"$")
     public void iGetTheShelterWithName(String expectedName) throws Exception {
-        String response = stepDefs.mockMvc.perform(get("/shelters/" + 1)
+        List<Shelter> shelters = shelterRepository.findByName(expectedName);
+        Optional<Shelter> shelter = shelters.stream().findFirst();
+        String response = stepDefs.mockMvc.perform(get("/shelters/{id}", shelter.isPresent() ? shelter.get().getId() : "1")
                         .accept(MediaType.APPLICATION_JSON)
                         .with(AuthenticationStepDefs.authenticate()))
                 .andReturn().getResponse().getContentAsString();
