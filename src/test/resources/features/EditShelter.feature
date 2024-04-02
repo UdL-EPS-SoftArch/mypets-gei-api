@@ -24,11 +24,13 @@ Feature: Edit Shelter
   Scenario: Edit shelter with admin
     Given I login as "admin" with password "admin"
     When I update the shelter with name "Shelter 1" to name "Another Shelter" email "shelter@sample.app" and mobile "123123123"
+    And I get the shelter with name "Another Shelter"
     Then The response code is 200
 
   Scenario: Edit shelter with volunteer
     Given I login as "volunteer" with password "volunteer"
     When I update the shelter with name "Shelter 1" to name "Another Shelter" email "shelter@sample.app" and mobile "123123123"
+    And I get the shelter with name "Another Shelter"
     Then The response code is 200
 
   Scenario: Edit shelter with missing new name

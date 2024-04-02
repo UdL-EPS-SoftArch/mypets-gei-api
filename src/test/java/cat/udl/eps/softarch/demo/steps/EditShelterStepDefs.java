@@ -9,6 +9,7 @@ import cat.udl.eps.softarch.demo.repository.AdminRepository;
 import cat.udl.eps.softarch.demo.repository.ShelterRepository;
 import cat.udl.eps.softarch.demo.repository.ShelterVolunteerRepository;
 import cat.udl.eps.softarch.demo.repository.UserRepository;
+import com.jayway.jsonpath.JsonPath;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.When;
@@ -19,9 +20,12 @@ import org.springframework.http.MediaType;
 
 import java.nio.charset.StandardCharsets;
 import java.time.ZonedDateTime;
+import java.util.List;
 import java.util.Optional;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
+
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 
@@ -86,5 +90,20 @@ public class EditShelterStepDefs {
             volunteer.encodePassword();
             shelterVolunteerRepository.save(volunteer);
         }
+    }
+
+    //You should also check that the update has been materialised in the backend. For that you can add an additional step where a GET is performed using the shelter ID and the you check in the returned JSON, using JSONPath, that the updated name is returned now
+
+    @And("^I get the shelter with name \"([^\"]*)\"$")
+    public void iGetTheShelterWithName(String expectedName) throws Exception {
+        String response = stepDefs.mockMvc.perform(get("/shelters/" + 1)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .with(AuthenticationStepDefs.authenticate()))
+                .andReturn().getResponse().getContentAsString();
+        System.out.println(response);
+
+        String actualName = JsonPath.read(response,"$.name");
+
+        Assert.assertEquals(expectedName, actualName);
     }
 }
