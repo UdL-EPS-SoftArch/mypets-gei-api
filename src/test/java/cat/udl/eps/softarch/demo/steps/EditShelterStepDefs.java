@@ -10,6 +10,7 @@ import cat.udl.eps.softarch.demo.repository.ShelterRepository;
 import cat.udl.eps.softarch.demo.repository.ShelterVolunteerRepository;
 import cat.udl.eps.softarch.demo.repository.UserRepository;
 import com.jayway.jsonpath.JsonPath;
+import com.jayway.jsonpath.PathNotFoundException;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.When;
@@ -23,6 +24,7 @@ import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.Optional;
 
+import static com.jayway.jsonpath.internal.path.PathCompiler.fail;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -84,18 +86,21 @@ public class EditShelterStepDefs {
 
     @And("^I get the shelter with name \"([^\"]*)\"$")
     public void iGetTheShelterWithName(String expectedName) throws Exception {
-        List<Shelter> shelters = shelterRepository.findByName(expectedName);
-        Optional<Shelter> shelter = shelters.stream().findFirst();
-        String response = stepDefs.mockMvc.perform(get("/shelters/{id}", shelter.isPresent() ? shelter.get().getId() : "1")
+        String response = stepDefs.mockMvc.perform(get("/shelters/" + 1)
                         .accept(MediaType.APPLICATION_JSON)
                         .with(AuthenticationStepDefs.authenticate()))
                 .andReturn().getResponse().getContentAsString();
         System.out.println(response);
 
-        String actualName = JsonPath.read(response,"$.name");
-
-        Assert.assertEquals(expectedName, actualName);
+        try {
+            String actualName = JsonPath.read(response, "$.name");
+            Assert.assertEquals(expectedName, actualName);
+        } catch (PathNotFoundException e) {
+            // Handle case where the 'name' field is not found in the JSON response
+            fail("The 'name' field is not found in the JSON response: " + response);
+        }
     }
+
 
     @Given("There is a registered already admin with username \"([^\"]*)\" and password \"([^\"]*)\" and email \"([^\"]*)\"$")
     public void thereIsARegisteredAlreadyAdminWithUsernameAndPasswordAndEmail(String adminname, String adminPasswd, String adminEmail) {
