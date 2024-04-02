@@ -1,12 +1,10 @@
 package cat.udl.eps.softarch.demo.domain;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-
+import com.fasterxml.jackson.annotation.JsonValue;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
-
-import com.fasterxml.jackson.annotation.JsonValue;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.hibernate.validator.constraints.Length;
@@ -77,7 +75,7 @@ public class User extends UriEntity<String> implements UserDetails {
 		return true;
 	}
 
-	@OneToMany
+	@OneToMany(fetch = FetchType.EAGER)
 	public List<FavouritedPets> favouritedPets;
 
 }
