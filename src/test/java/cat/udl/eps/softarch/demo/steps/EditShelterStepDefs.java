@@ -67,18 +67,6 @@ public class EditShelterStepDefs {
         }
 
 
-    @Given("^There is a registered admin with username \"([^\"]*)\" and password \"([^\"]*)\" and email \"([^\"]*)\"$")
-    public void thereIsARegisteredAdminWithUsernameAndPasswordAndEmail(String adminname, String adminPasswd, String adminEmail) throws Throwable{
-            if (!adminRepository.existsById(adminname)) {
-                Admin user = new Admin();
-                user.setEmail(adminEmail);
-                user.setId(adminname);
-                user.setPassword(adminPasswd);
-                user.encodePassword();
-                adminRepository.save(user);
-              
-        }
-    }
 
     @Given("^There is a registered volunteer with username \"([^\"]*)\" and password \"([^\"]*)\"$")
     public void thereIsARegisteredVolunteerWithUsernameAndPasswordAndEmail(String name, String mobile) {
@@ -105,5 +93,18 @@ public class EditShelterStepDefs {
         String actualName = JsonPath.read(response,"$.name");
 
         Assert.assertEquals(expectedName, actualName);
+    }
+
+    @Given("There is a registered already admin with username \"([^\"]*)\" and password \"([^\"]*)\" and email \"([^\"]*)\"$")
+    public void thereIsARegisteredAlreadyAdminWithUsernameAndPasswordAndEmail(String adminname, String adminPasswd, String adminEmail) {
+        if (!adminRepository.existsById(adminname)) {
+            Admin user = new Admin();
+            user.setEmail(adminEmail);
+            user.setId(adminname);
+            user.setPassword(adminPasswd);
+            user.encodePassword();
+            adminRepository.save(user);
+
+        }
     }
 }

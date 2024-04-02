@@ -5,7 +5,7 @@ Feature: Edit Shelter
 
   Background:
     Given There is a registered user with username "user" and password "existing" and email "user@sample.app"
-    Given There is a registered admin with username "admin" and password "admin" and email "admin@smaple.app"
+    Given There is a registered already admin with username "admin" and password "admin" and email "admin@smaple.app"
     Given There is a registered volunteer with username "volunteer" and password "volunteer"
     And There is already a shelter with name "Shelter 1" email "shelter@sample.com" and mobile "999999999"
 
