@@ -49,4 +49,11 @@ public class Shelter extends UriEntity<Long> {
 
     @OneToOne
     public Location locatedAt;
+
+    @PrePersist
+    public void prePersist() {
+        createdAt = ZonedDateTime.now();
+        updatedAt = ZonedDateTime.now();
+        isActive = false;
+    }
 }
