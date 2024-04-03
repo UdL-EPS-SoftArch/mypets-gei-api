@@ -10,8 +10,7 @@ import cat.udl.eps.softarch.demo.repository.AdminRepository;
 import cat.udl.eps.softarch.demo.repository.ShelterRepository;
 import cat.udl.eps.softarch.demo.repository.ShelterVolunteerRepository;
 import cat.udl.eps.softarch.demo.repository.UserRepository;
-import com.jayway.jsonpath.JsonPath;
-import com.jayway.jsonpath.PathNotFoundException;
+
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.When;
@@ -31,6 +30,8 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+
+import org.json.JSONObject;
 
 public class EditShelterStepDefs {
 
@@ -82,45 +83,23 @@ public class EditShelterStepDefs {
             shelterVolunteerRepository.save(volunteer);
         }
     }
-    public String searchForKey(String jsonString, String key) {
-        int index = 0;
-        while (index < jsonString.length()) {
-            index = jsonString.indexOf('"' + key + '"', index);
-            if (index == -1) {
-                return null; // Key not found
-            }
-            // Find the value associated with the key
-            int startIndex = jsonString.indexOf(':', index) + 1;
-            int endIndex = jsonString.indexOf(',', startIndex);
-            if (endIndex == -1) {
-                endIndex = jsonString.indexOf('}', startIndex);
-            }
-            String value = jsonString.substring(startIndex, endIndex).trim();
-            if (value.startsWith("\"") && value.endsWith("\"")) {
-                // Remove quotes from string value
-                value = value.substring(1, value.length() - 1);
-            }
-            return value;
-        }
-        return null; // Key not found
-    }
-
     //You should also check that the update has been materialised in the backend. For that you can add an additional step where a GET is performed using the shelter ID and the you check in the returned JSON, using JSONPath, that the updated name is returned now
 
     @And("^I get the shelter with name \"([^\"]*)\"")
-    public void iGetTheShelterWithName(String expectedName) throws Exception {
-        List<Shelter> shelters = shelterRepository.findByName(expectedName);
+    public void iGetTheShelterWithName(String newname) throws Exception {
+        List<Shelter> shelters = shelterRepository.findByName(newname);
         Shelter shelter = shelters.get(0);
         String response = stepDefs.mockMvc.perform(get("/shelters/" + shelter.getId())
                         .accept(MediaType.APPLICATION_JSON)
                         .with(AuthenticationStepDefs.authenticate()))
                 .andReturn().getResponse().getContentAsString();
-
+        JSONObject jsonObject = new JSONObject(response);
+        jsonObject.getString("name");
         try {
             System.out.println("-------------------" + response);
-            String actualName = searchForKey(response, "name");
+            String actualName = jsonObject.getString("name");
             System.out.println("Actual name: " + actualName);
-            Assert.assertEquals(expectedName, actualName);
+            Assert.assertEquals(newname, actualName);
         } catch (Exception e) {
            fail("Key not found");
         }
