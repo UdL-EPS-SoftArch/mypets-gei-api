@@ -107,7 +107,7 @@ public class EditShelterStepDefs {
 
     //You should also check that the update has been materialised in the backend. For that you can add an additional step where a GET is performed using the shelter ID and the you check in the returned JSON, using JSONPath, that the updated name is returned now
 
-    @And("^I get the shelter with name \"([^\"]*)\"$")
+    @And("^I get the shelter with name \"([^\"]*)\"")
     public void iGetTheShelterWithName(String expectedName) throws Exception {
         List<Shelter> shelters = shelterRepository.findByName(expectedName);
         Shelter shelter = shelters.get(0);
@@ -121,9 +121,8 @@ public class EditShelterStepDefs {
             String actualName = searchForKey(response, "name");
             System.out.println("Actual name: " + actualName);
             Assert.assertEquals(expectedName, actualName);
-        } catch (PathNotFoundException e) {
-            // Handle case where the 'name' field is not found in the JSON response
-            fail("The 'name' field is not found in the JSON response: " + response);
+        } catch (Exception e) {
+           fail("Key not found");
         }
     }
 
