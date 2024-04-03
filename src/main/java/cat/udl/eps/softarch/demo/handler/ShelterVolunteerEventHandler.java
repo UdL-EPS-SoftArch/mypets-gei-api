@@ -29,7 +29,7 @@ public class ShelterVolunteerEventHandler {
     }
 
     @HandleBeforeDelete
-    public void handleShelterVolunteerBeforeCreate(ShelterVolunteer volunteer) {
+    public void handleShelterVolunteerBeforeDelete(ShelterVolunteer volunteer) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String username = authentication.getName();
         ShelterVolunteer requestVolunteer = shelterVolunteerRepository.findById(username).orElse(null);
@@ -41,7 +41,7 @@ public class ShelterVolunteerEventHandler {
         // Do something with the username, like associating it with the created user
     }
     @HandleAfterDelete
-    public void handleShelterVolunteerPostCreate(ShelterVolunteer volunteer) {
+    public void handleShelterVolunteerPostDelete(ShelterVolunteer volunteer) {
         logger.info("After deleting: {}", volunteer.toString());
 
         shelterVolunteerRepository.delete(volunteer);
