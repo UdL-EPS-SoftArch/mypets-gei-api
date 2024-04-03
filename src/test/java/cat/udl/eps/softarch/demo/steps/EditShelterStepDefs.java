@@ -86,14 +86,16 @@ public class EditShelterStepDefs {
 
     @And("^I get the shelter with name \"([^\"]*)\"$")
     public void iGetTheShelterWithName(String expectedName) throws Exception {
-        String response = stepDefs.mockMvc.perform(get("/shelters/" + 1)
+        List<Shelter> shelters = shelterRepository.findByName(expectedName);
+        Shelter shelter = shelters.get(0);
+        String response = stepDefs.mockMvc.perform(get("/shelters/" + shelter.getId())
                         .accept(MediaType.APPLICATION_JSON)
                         .with(AuthenticationStepDefs.authenticate()))
                 .andReturn().getResponse().getContentAsString();
 
         try {
-            //String actualName = JsonPath.read(response, "$.name");
-            //Assert.assertEquals(expectedName, actualName);
+            String actualName = JsonPath.read(response, "$.name");
+            Assert.assertEquals(expectedName, actualName);
         } catch (PathNotFoundException e) {
             // Handle case where the 'name' field is not found in the JSON response
             fail("The 'name' field is not found in the JSON response: " + response);
