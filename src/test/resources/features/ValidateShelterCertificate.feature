@@ -5,15 +5,14 @@ Feature: Validate ShelterCertificate
 
   Background: Exists a shelter with name "test"
     Given A shelter with name "test"
-    And An admin with username "admin" and password "admin"
+    And An admin with username "admin" and password "123456789"
 
   Scenario: Validating a correct shelter certificate
     Given a shelter certificate associated with a shelter with name "test" with valid information created by a shelter volunteer
-    Then the admin with username "admin" and password "admin" should verify the certificate validity associated with a shelter with name "test"
-    And the admin should approve the certificate associated to the shelter with name "test"
+    When the admin with username "admin" and password "123456789" verifies the certificate validity associated with a shelter with name "test"
+    Then The response code is 200
 
   Scenario: Validating a incorrect shelter certificate
     Given a shelter certificate associated with a shelter with name "test" with invalid information created by a shelter volunteer
-    Then the admin should verify the wrong certificate validity associated with a shelter with name "test"
-    And the admin should reject the certificate associated to the shelter with name "test"
+    Then the admin with username "admin" and password "123456789" rejects the certificate validity associated with a shelter with name "test"
 

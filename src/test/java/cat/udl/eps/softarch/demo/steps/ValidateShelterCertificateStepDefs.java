@@ -4,21 +4,24 @@ import cat.udl.eps.softarch.demo.domain.Admin;
 import cat.udl.eps.softarch.demo.domain.Location;
 import cat.udl.eps.softarch.demo.domain.Shelter;
 import cat.udl.eps.softarch.demo.domain.ShelterCertificate;
+import cat.udl.eps.softarch.demo.repository.AdminRepository;
 import cat.udl.eps.softarch.demo.repository.LocationRepository;
 import cat.udl.eps.softarch.demo.repository.ShelterCertificateRepository;
 import cat.udl.eps.softarch.demo.repository.ShelterRepository;
-import cat.udl.eps.softarch.demo.repository.UserRepository;
-import com.sun.tools.jconsole.JConsoleContext;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
-import jakarta.validation.constraints.AssertTrue;
+import io.cucumber.java.en.When;
+import org.json.JSONObject;
 import org.junit.Assert;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.time.LocalDate;
 import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 
 public class ValidateShelterCertificateStepDefs {
 
@@ -32,7 +35,7 @@ public class ValidateShelterCertificateStepDefs {
     private LocationRepository locationRepository;
 
     @Autowired
-    private UserRepository userRepository;
+    private AdminRepository adminRepository;
 
     @Autowired
     private StepDefs stepDefs;
@@ -58,7 +61,8 @@ public class ValidateShelterCertificateStepDefs {
         admin.setId(username);
         admin.setEmail("admin@admin.com");
         admin.setPassword(password);
-        userRepository.save(admin);
+        admin.encodePassword();
+        adminRepository.save(admin);
     }
 
     @Given("^a shelter certificate associated with a shelter with name \"([^\"]*)\" with valid information created by a shelter volunteer$")
@@ -71,29 +75,43 @@ public class ValidateShelterCertificateStepDefs {
         shelterCertificateRepository.save(shelterCertificate);
     }
 
-    @Then("^the admin with username \"([^\"]*)\" and password \"([^\"]*)\" should verify the certificate validity associated with a shelter with name \"([^\"]*)\"$")
+    @When("^the admin with username \"([^\"]*)\" and password \"([^\"]*)\" verifies the certificate validity associated with a shelter with name \"([^\"]*)\"$")
     public void thenAdminShouldVerifyTheCertificateValidityAssociatedWithAShelterWithName(String username, String password, String name) throws Exception {
         Shelter shelter = shelterRepository.findByName(name).get(0);
         AuthenticationStepDefs.currentUsername = username;
         AuthenticationStepDefs.currentPassword = password;
 
         stepDefs.result = stepDefs.mockMvc.perform(
-                get( "/shelterCertificates/shelterServed/{id}", shelter.getId())
-                        .with(AuthenticationStepDefs.authenticate()).accept("application/json"));
-        //ShelterCertificate shelterCertificate = testShelterCertificateRepository.findByShelterServed(shelter);
-        System.out.println("The Shelter Certificate IS valid!" + stepDefs.result.getClass().toString());
-        Assert.assertTrue("The Shelter Certificate IS not valid!", true);
+                get( "/shelterCertificates/search/findByShelterServed?shelterServed={id}", "/shelters/"+shelter.getId())
+                        .with(AuthenticationStepDefs.authenticate())
+                        .accept("application/json"));
+
+        JSONObject jsonObject = new JSONObject(stepDefs.result.andReturn().getResponse().getContentAsString());
+
+        String shelterCertificateUri = jsonObject.getString("uri");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSSSSXXX");
+        LocalDate shelterCertificateExpirationDate = LocalDate.parse(jsonObject.getString("expirationDate"), formatter);
+
+        boolean isShelterCertificateValid = shelterCertificateExpirationDate.isAfter(LocalDate.now());
+        if (!isShelterCertificateValid) {
+            System.out.println("The Shelter Certificate IS not valid!" + stepDefs.result);
+            Assert.fail("The Shelter Certificate IS not valid!");
+        }
+
+        stepDefs.result = stepDefs.mockMvc.perform(
+                        patch( shelterCertificateUri)
+                                .with(AuthenticationStepDefs.authenticate())
+                                .content("{\"validated\":true}")
+                                .accept("application/json"));
+
+        jsonObject = new JSONObject(stepDefs.result.andReturn().getResponse().getContentAsString());
+        boolean isShelterCertificateValidated = jsonObject.getBoolean("validated");
+        if (!isShelterCertificateValidated) {
+            System.out.println("The Shelter Certificate IS not validated!" + stepDefs.result);
+            Assert.fail("The Shelter Certificate IS not validated!");
+        }
     }
 
-    @And("^the admin should approve the certificate associated to the shelter with name \"([^\"]*)\"$")
-    public void theAdminShouldApproveTheCertificateAssociatedToTheShelterWithName(String name){
-        Shelter shelter = shelterRepository.findByName(name).get(0);
-        ShelterCertificate sCert = shelterCertificateRepository.findByShelterServed(shelter);
-        sCert.setValidated(true);
-        shelterCertificateRepository.save(sCert);
-        sCert = shelterCertificateRepository.findByShelterServed(shelter);
-        Assert.assertTrue("The Shelter Certificate Is not validated", sCert.getValidated());
-    }
     @Given("^a shelter certificate associated with a shelter with name \"([^\"]*)\" with invalid information created by a shelter volunteer$")
     public void aShelterCertificateWithInvalidInformationSentByAVolunteer(String name){
         Shelter shelter = shelterRepository.findByName(name).get(0);
@@ -104,20 +122,25 @@ public class ValidateShelterCertificateStepDefs {
         shelterCertificateRepository.save(shelterCertificate);
     }
 
-    @Then("^the admin should verify the wrong certificate validity associated with a shelter with name \"([^\"]*)\"$")
-    public void thenAdminShouldVerifyTheCertificateValidityAssociatedWithAShelterWithName1(String name) {
+    @Then("^the admin with username \"([^\"]*)\" and password \"([^\"]*)\" rejects the certificate validity associated with a shelter with name \"([^\"]*)\"$")
+    public void thenAdminShouldVerifyTheCertificateValidityAssociatedWithAShelterWithName1(String username, String password, String name) throws Exception {
         Shelter shelter = shelterRepository.findByName(name).get(0);
-        ShelterCertificate shelterCertificate = shelterCertificateRepository.findByShelterServed(shelter);
-        Assert.assertFalse("The Shelter Certificate IS not valid!", shelterCertificate.getExpirationDate().isAfter(ZonedDateTime.now()));
+        AuthenticationStepDefs.currentUsername = username;
+        AuthenticationStepDefs.currentPassword = password;
+
+        stepDefs.result = stepDefs.mockMvc.perform(
+                        get( "/shelterCertificates/search/findByShelterServed?shelterServed={id}", "/shelters/"+shelter.getId())
+                                .with(AuthenticationStepDefs.authenticate())
+                                .accept("application/json"));
+
+        JSONObject jsonObject = new JSONObject(stepDefs.result.andReturn().getResponse().getContentAsString());
+
+        boolean isValidated = jsonObject.getBoolean("validated");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSSSSXXX");
+        LocalDate shelterCertificateExpirationDate = LocalDate.parse(jsonObject.getString("expirationDate"), formatter);
+
+        boolean isShelterCertificateValid = shelterCertificateExpirationDate.isAfter(LocalDate.now());
+        Assert.assertFalse(isShelterCertificateValid && isValidated);
     }
 
-    @And("^the admin should reject the certificate associated to the shelter with name \"([^\"]*)\"$")
-    public void theAdminShouldApproveTheCertificateAssociatedToTheShelterWithName1(String name){
-        Shelter shelter = shelterRepository.findByName(name).get(0);
-        ShelterCertificate sCert = shelterCertificateRepository.findByShelterServed(shelter);
-        sCert.setValidated(false);
-        shelterCertificateRepository.save(sCert);
-        sCert = shelterCertificateRepository.findByShelterServed(shelter);
-        Assert.assertFalse("The Shelter Certificate Is not validated", sCert.getValidated());
-    }
 }
