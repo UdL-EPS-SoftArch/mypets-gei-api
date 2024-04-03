@@ -19,7 +19,8 @@ public class Admin extends User{
     @Override
     @JsonValue(value = false)
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
-    public Collection<? extends GrantedAuthority> getAuthorities(){
+    @ElementCollection
+    public Collection<? extends GrantedAuthority> getAuthorities() {
         return AuthorityUtils.commaSeparatedStringToAuthorityList("ROLE_ADMIN");
     }
 }
