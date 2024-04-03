@@ -5,6 +5,7 @@ import cat.udl.eps.softarch.demo.domain.ShelterVolunteer;
 import cat.udl.eps.softarch.demo.domain.User;
 import cat.udl.eps.softarch.demo.domain.Admin;
 
+
 import cat.udl.eps.softarch.demo.repository.AdminRepository;
 import cat.udl.eps.softarch.demo.repository.ShelterRepository;
 import cat.udl.eps.softarch.demo.repository.ShelterVolunteerRepository;
@@ -81,6 +82,28 @@ public class EditShelterStepDefs {
             shelterVolunteerRepository.save(volunteer);
         }
     }
+    public String searchForKey(String jsonString, String key) {
+        int index = 0;
+        while (index < jsonString.length()) {
+            index = jsonString.indexOf('"' + key + '"', index);
+            if (index == -1) {
+                return null; // Key not found
+            }
+            // Find the value associated with the key
+            int startIndex = jsonString.indexOf(':', index) + 1;
+            int endIndex = jsonString.indexOf(',', startIndex);
+            if (endIndex == -1) {
+                endIndex = jsonString.indexOf('}', startIndex);
+            }
+            String value = jsonString.substring(startIndex, endIndex).trim();
+            if (value.startsWith("\"") && value.endsWith("\"")) {
+                // Remove quotes from string value
+                value = value.substring(1, value.length() - 1);
+            }
+            return value;
+        }
+        return null; // Key not found
+    }
 
     //You should also check that the update has been materialised in the backend. For that you can add an additional step where a GET is performed using the shelter ID and the you check in the returned JSON, using JSONPath, that the updated name is returned now
 
@@ -94,7 +117,9 @@ public class EditShelterStepDefs {
                 .andReturn().getResponse().getContentAsString();
 
         try {
-            String actualName = JsonPath.read(response, "$.name");
+            System.out.println("-------------------" + response);
+            String actualName = searchForKey(response, "name");
+            System.out.println("Actual name: " + actualName);
             Assert.assertEquals(expectedName, actualName);
         } catch (PathNotFoundException e) {
             // Handle case where the 'name' field is not found in the JSON response
