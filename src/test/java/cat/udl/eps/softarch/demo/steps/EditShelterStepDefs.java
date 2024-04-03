@@ -90,7 +90,6 @@ public class EditShelterStepDefs {
                         .accept(MediaType.APPLICATION_JSON)
                         .with(AuthenticationStepDefs.authenticate()))
                 .andReturn().getResponse().getContentAsString();
-        System.out.println(response);
 
         try {
             String actualName = JsonPath.read(response, "$.name");
