@@ -85,16 +85,12 @@ public class EditShelterStepDefs {
     public void iGetTheShelterWithName(String newname) throws Exception {
         List<Shelter> shelters = shelterRepository.findByName(newname);
         Shelter shelter = shelters.get(0);
-        String response = stepDefs.mockMvc.perform(get("/shelters/" + shelter.getId())
-                        .accept(MediaType.APPLICATION_JSON)
-                        .with(AuthenticationStepDefs.authenticate()))
-                .andReturn().getResponse().getContentAsString();
-        JSONObject jsonObject = new JSONObject(response);
+        stepDefs.result = stepDefs.mockMvc.perform(get("/shelters/" + shelter.getId())
+                        .accept(MediaType.APPLICATION_JSON)).andDo(print());
+        JSONObject jsonObject = new JSONObject(stepDefs.result.andReturn().getResponse().getContentAsString());
         jsonObject.getString("name");
         try {
-            System.out.println("-------------------" + response);
             String actualName = jsonObject.getString("name");
-            System.out.println("Actual name: " + actualName);
             Assert.assertEquals(newname, actualName);
         } catch (Exception e) {
            fail("Key not found");
