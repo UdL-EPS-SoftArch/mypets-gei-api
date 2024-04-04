@@ -2,7 +2,6 @@ package cat.udl.eps.softarch.demo.steps;
 
 import cat.udl.eps.softarch.demo.domain.Shelter;
 import cat.udl.eps.softarch.demo.domain.ShelterVolunteer;
-import cat.udl.eps.softarch.demo.domain.User;
 import cat.udl.eps.softarch.demo.domain.Admin;
 
 
@@ -20,9 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 
 import java.nio.charset.StandardCharsets;
-import java.time.ZonedDateTime;
 import java.util.List;
-import java.util.Optional;
 
 import static com.jayway.jsonpath.internal.path.PathCompiler.fail;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
@@ -55,22 +52,22 @@ public class EditShelterStepDefs {
     }
 
     @When("^I update the shelter with name \"([^\"]*)\" to name \"([^\"]*)\" email \"([^\"]*)\" and mobile \"([^\"]*)\"$")
-    public void iUpdateTheShelterWithNameToNameEmailAndMobile(String PrevName, String NewName, String email, String mobile)
+    public void iUpdateTheShelterWithNameToNameEmailAndMobile(String prevName, String newName, String email, String mobile)
         throws Throwable {
-                    Shelter shelter = shelterRepository.findByName(PrevName).get(0);
+                    Shelter shelter = shelterRepository.findByName(prevName).get(0);
                     if (shelter != null) {
-                       shelter =  shelterRepository.findByName(PrevName).get(0);
+                       shelter =  shelterRepository.findByName(prevName).get(0);
                     }
-                stepDefs.result = stepDefs.mockMvc.perform(patch(shelter.getUri())//"/routes/"+route.getId())
+                stepDefs.result = stepDefs.mockMvc.perform(patch(shelter.getUri())
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(new JSONObject().put("name",NewName).put("email",email).put("mobile",mobile).put("createdAt", ZonedDateTime.now()).toString())
+                        .content(new JSONObject().put("name", newName)
+                                        .put("email", email)
+                                        .put("mobile", mobile).toString())
                         .characterEncoding(StandardCharsets.UTF_8)
                         .accept(MediaType.APPLICATION_JSON)
                         .with(AuthenticationStepDefs.authenticate()))
                 .andDo(print());
         }
-
-
 
     @Given("^There is a registered volunteer with username \"([^\"]*)\" and password \"([^\"]*)\"$")
     public void thereIsARegisteredVolunteerWithUsernameAndPasswordAndEmail(String name, String mobile) {
@@ -83,7 +80,6 @@ public class EditShelterStepDefs {
             shelterVolunteerRepository.save(volunteer);
         }
     }
-    //You should also check that the update has been materialised in the backend. For that you can add an additional step where a GET is performed using the shelter ID and the you check in the returned JSON, using JSONPath, that the updated name is returned now
 
     @And("^I get the shelter with name \"([^\"]*)\"")
     public void iGetTheShelterWithName(String newname) throws Exception {
