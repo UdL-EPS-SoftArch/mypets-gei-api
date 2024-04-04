@@ -1,4 +1,4 @@
-Feature:
+Feature: Delete Pet
   in order to use the app
   As a Shelter Volunteer
   I must be able to delete a Pet
