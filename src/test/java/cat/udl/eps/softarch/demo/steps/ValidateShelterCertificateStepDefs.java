@@ -122,7 +122,7 @@ public class ValidateShelterCertificateStepDefs {
         shelterCertificateRepository.save(shelterCertificate);
     }
 
-    @Then("^the admin with username \"([^\"]*)\" and password \"([^\"]*)\" rejects the certificate validity associated with a shelter with name \"([^\"]*)\"$")
+    @When("^the admin with username \"([^\"]*)\" and password \"([^\"]*)\" rejects the certificate validity associated with a shelter with name \"([^\"]*)\"$")
     public void thenAdminShouldVerifyTheCertificateValidityAssociatedWithAShelterWithName1(String username, String password, String name) throws Exception {
         Shelter shelter = shelterRepository.findByName(name).get(0);
         AuthenticationStepDefs.currentUsername = username;
