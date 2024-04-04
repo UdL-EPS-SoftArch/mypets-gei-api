@@ -36,7 +36,7 @@ public class WebSecurityConfig {
                 .requestMatchers(HttpMethod.DELETE, "/shelters/*").hasRole("ADMIN")
                 .requestMatchers(HttpMethod.DELETE, "/pets/*").hasAnyRole("SHELTER_VOLUNTEER", "ADMIN")
                 .requestMatchers(HttpMethod.DELETE, "/**/*").authenticated()
-                .requestMatchers("/shelters/**").hasAuthority("ROLE_ADMIN")
+                .requestMatchers(HttpMethod.POST, "/shelters/**").hasAuthority("ROLE_ADMIN")
                 .requestMatchers(HttpMethod.POST, "/**/*").authenticated()
 
                         .anyRequest().permitAll())
