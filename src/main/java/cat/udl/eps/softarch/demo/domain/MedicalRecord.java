@@ -9,6 +9,7 @@ import lombok.EqualsAndHashCode;
 import java.time.ZonedDateTime;
 
 @EqualsAndHashCode(callSuper = true)
+@Table(name = "MedicalRecord")
 @Data
 @Entity
 public class MedicalRecord extends UriEntity<Long> {

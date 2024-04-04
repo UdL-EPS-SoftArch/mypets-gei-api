@@ -2,68 +2,94 @@ package cat.udl.eps.softarch.demo.steps;
 
 import cat.udl.eps.softarch.demo.domain.MedicalRecord;
 import cat.udl.eps.softarch.demo.domain.Pet;
-import cat.udl.eps.softarch.demo.domain.ShelterVolunteer;
 import cat.udl.eps.softarch.demo.repository.MedicalRecordRepository;
 import cat.udl.eps.softarch.demo.repository.PetRepository;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.When;
+import org.junit.Assert;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 
+import java.nio.charset.StandardCharsets;
 import java.time.ZonedDateTime;
+
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 
 
 public class AddMedicalRecordStepDefs {
 
-    Pet pet;
-    ShelterVolunteer volunteer;
+
 
     @Autowired
     MedicalRecordRepository medicalRecordRepository;
 
+    @Autowired
+    private StepDefs stepDefs;
 
-    @And("I am logged in as a shelter volunteer")
-    public void iAmLoggedInAsAShelterVolunteer() {
-        volunteer = new ShelterVolunteer();
-    }
-    @Given("a pet {string} exists in the system")
-    public void aPetExistsInTheSystem(String arg0) {
+    Pet pet;
+
+    @Given("a pet exists in the system")
+    public void aPetExistsInTheSystem() {
         pet = new Pet();
-        pet.setName(arg0);
     }
 
-    @When("I add a new medical record with issue {string}, description {string}, and date {string}")
-    public void iAddANewMedicalRecordWithIssueDescriptionAndDateFor(String issue, String description, String date) {
-        ZonedDateTime dateTime = ZonedDateTime.parse(date);
+    @When("I add a new medical record for a pet with issue {string}, description {string}, and date {string}")
+    public void iAddANewMedicalRecordForAPetWithIssueDescriptionAndDate(String issue, String description, String date) throws Throwable {
+        MedicalRecord newRecord = new MedicalRecord();
+        newRecord.setDescription(description);
+        newRecord.setIssue(issue);
+        newRecord.setDate(ZonedDateTime.parse(date));
+        newRecord.setPet(pet);
+        
+        // Mock a POST request to /medicalRecords
+        stepDefs.result = stepDefs.mockMvc.perform(
+                        post("/medicalRecords")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(stepDefs.mapper.writeValueAsString(newRecord))
+                                .characterEncoding(StandardCharsets.UTF_8)
+                                .with(AuthenticationStepDefs.authenticate()))
+                .andDo(print());
+    }
 
-        // Create and set up new MedicalRecord
+
+
+    @When("I add a new medical record for a pet with issue {string}, description {string} and no date")
+    public void iAddANewMedicalRecordForAPetWithIssueDescriptionAndNoDate(String issue, String description) throws Exception {
+        // Assuming that MedicalRecord has a constructor that does not require a date or it's nullable
+        MedicalRecord recordWithoutDate = new MedicalRecord();
+        //recordWithoutDate.setDescription(description);
+        recordWithoutDate.setIssue(issue);
+        
+        recordWithoutDate.setPet(pet);
+
+        // Simulate the action of adding a record without a date through a REST call
+        stepDefs.result = stepDefs.mockMvc.perform(
+                        post("/medicalRecords")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(stepDefs.mapper.writeValueAsString(recordWithoutDate))
+                                .characterEncoding(StandardCharsets.UTF_8)
+                                .with(AuthenticationStepDefs.authenticate()))
+                .andDo(print());
+    }
+
+    @When("I try to add a medical record for a pet")
+    public void iTryToAddAMedicalRecordForAPet() throws Exception {
+        // Attempt to add a medical record without specifying role or permissions
         MedicalRecord medicalRecord = new MedicalRecord();
-        medicalRecord.setIssue(issue);
-        medicalRecord.setDescription(description);
-        medicalRecord.setDate(dateTime);
-        medicalRecord.setPet(pet);
-        medicalRecordRepository.save(medicalRecord);
-    }
+        medicalRecord.setDescription("Description");
+        medicalRecord.setIssue("Issue");
+        medicalRecord.setDate(ZonedDateTime.now());
+        medicalRecord.setPet(pet); // Simplification for example purposes
 
-
-    @And("It has been created a medical record with issue {string} and description {string}")
-    public void itHasBeenCreatedAMedicalRecordWithIssueAndDescriptionFor(String arg0, String arg1, String arg2) {
-
-    }
-
-    @When("I add a new medical record with issue {string}, description {string} and no date")
-    public void iAddANewMedicalRecordWithIssueDescriptionAndNoDateFor(String arg0, String arg1, String arg2) {
-    }
-
-    @Given("I am logged in as a normal user")
-    public void iAmLoggedInAsANormalUser() { 
-    }
-
-    @When("I try to add a medical record")
-    public void iTryToAddAMedicalRecordFor(String arg0) {
-    }
-
-    @Given("I am logged in as an admin")
-    public void iAmLoggedInAsAnAdmin() {
+        stepDefs.result = stepDefs.mockMvc.perform(
+                        post("/medicalRecords")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(stepDefs.mapper.writeValueAsString(medicalRecord))
+                                .characterEncoding(StandardCharsets.UTF_8)
+                        .with(AuthenticationStepDefs.authenticate())
+                )
+                .andDo(print());
     }
 }
