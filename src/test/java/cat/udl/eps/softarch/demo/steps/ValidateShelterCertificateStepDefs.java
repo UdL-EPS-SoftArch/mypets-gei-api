@@ -135,12 +135,27 @@ public class ValidateShelterCertificateStepDefs {
 
         JSONObject jsonObject = new JSONObject(stepDefs.result.andReturn().getResponse().getContentAsString());
 
-        boolean isValidated = jsonObject.getBoolean("validated");
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSSSSXXX");
-        LocalDate shelterCertificateExpirationDate = LocalDate.parse(jsonObject.getString("expirationDate"), formatter);
+        String certificateUri = jsonObject.getString("uri");
 
-        boolean isShelterCertificateValid = shelterCertificateExpirationDate.isAfter(LocalDate.now());
-        Assert.assertFalse(isShelterCertificateValid && isValidated);
+        stepDefs.result = stepDefs.mockMvc.perform(
+                patch(certificateUri)
+                        .content("{\"validated\":false}")
+                        .with(AuthenticationStepDefs.authenticate())
+                        .accept("application/json"));
     }
 
+    @Then("The shelter certificate from shelter with name {string} is not validated")
+    public void theShelterCertificateFromShelterWithNameIsStillNotValidated(String shelterName) throws Exception {
+        Shelter shelter = shelterRepository.findByName(shelterName).get(0);
+
+        stepDefs.result = stepDefs.mockMvc.perform(
+                get( "/shelterCertificates/search/findByShelterServed?shelterServed={id}", "/shelters/"+shelter.getId())
+                        .with(AuthenticationStepDefs.authenticate())
+                        .accept("application/json"));
+
+        JSONObject jsonObject = new JSONObject(stepDefs.result.andReturn().getResponse().getContentAsString());
+        boolean isValidated = jsonObject.getBoolean("validated");
+
+        Assert.assertFalse(isValidated);
+    }
 }
