@@ -28,6 +28,7 @@ public class WebSecurityConfig {
     protected SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.authorizeHttpRequests((auth) -> auth
                 .requestMatchers(HttpMethod.GET, "/identity").authenticated()
+                .requestMatchers(HttpMethod.DELETE, "/shelterVolunteers/*").hasAnyRole("SHELTER_VOLUNTEER")
                 .requestMatchers(HttpMethod.POST, "/users").anonymous()
                 .requestMatchers(HttpMethod.POST, "/users/*").denyAll()
                 .requestMatchers(HttpMethod.PUT, "/**/*").authenticated()
