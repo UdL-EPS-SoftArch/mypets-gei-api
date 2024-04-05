@@ -2,12 +2,9 @@ package cat.udl.eps.softarch.demo.steps;
 
 import cat.udl.eps.softarch.demo.domain.MedicalRecord;
 import cat.udl.eps.softarch.demo.domain.Pet;
-import cat.udl.eps.softarch.demo.repository.MedicalRecordRepository;
 import cat.udl.eps.softarch.demo.repository.PetRepository;
-import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.When;
-import org.junit.Assert;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 
@@ -31,17 +28,7 @@ public class AddMedicalRecordStepDefs {
     public void aPetExistsInTheSystem() {
         var pet = new Pet();
 
-        pet.setName("Buddy");
-        pet.setAdopted(false); // Assuming false for a new entry, adjust as needed
-        pet.setColor("Brown");
-        pet.setSize("Medium");
-        pet.setWeight(20.5); // Example weight in kilograms
-        pet.setAge("5 years");
-        pet.setDescription("Friendly and loves to play fetch");
-        pet.setBreed("Labrador Retriever");
-
         petRepository.save(pet); // Save the pet to the database
-        
     }
 
     @When("I add a new medical record for a pet with issue {string}, description {string}, and date {string}")
@@ -50,7 +37,7 @@ public class AddMedicalRecordStepDefs {
         newRecord.setDescription(description);
         newRecord.setIssue(issue);
         newRecord.setDate(ZonedDateTime.parse(date));
-        //newRecord.setPet(petRepository.findAll().iterator().next());
+        newRecord.setPet(petRepository.findAll().iterator().next());
         
         // Mock a POST request to /medicalRecords
         stepDefs.result = stepDefs.mockMvc.perform(
@@ -67,14 +54,12 @@ public class AddMedicalRecordStepDefs {
 
     @When("I add a new medical record for a pet with issue {string}, description {string} and no date")
     public void iAddANewMedicalRecordForAPetWithIssueDescriptionAndNoDate(String issue, String description) throws Throwable {
-        // Assuming that MedicalRecord has a constructor that does not require a date, or it's nullable
         MedicalRecord recordWithoutDate = new MedicalRecord();
         recordWithoutDate.setDescription(description);
         recordWithoutDate.setIssue(issue);
-        
-        //recordWithoutDate.setPet(petRepository.findAll().iterator().next());
+        //No data added
+        recordWithoutDate.setPet(petRepository.findAll().iterator().next());
 
-        // Simulate the action of adding a record without a date through a REST call
         stepDefs.result = stepDefs.mockMvc.perform(
                         post("/medicalRecords")
                                 .contentType(MediaType.APPLICATION_JSON)
@@ -90,7 +75,7 @@ public class AddMedicalRecordStepDefs {
         medicalRecord.setDescription("Description");
         medicalRecord.setIssue("Issue");
         medicalRecord.setDate(ZonedDateTime.now());
-        //medicalRecord.setPet(petRepository.findAll().iterator().next());
+        medicalRecord.setPet(petRepository.findAll().iterator().next());
         
         stepDefs.result = stepDefs.mockMvc.perform(
                         post("/medicalRecords")

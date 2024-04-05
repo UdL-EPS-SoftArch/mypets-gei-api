@@ -2,7 +2,6 @@ package cat.udl.eps.softarch.demo.handler;
 
 import cat.udl.eps.softarch.demo.domain.MedicalRecord;
 import cat.udl.eps.softarch.demo.exceptions.UnauthorizedAccessException;
-import cat.udl.eps.softarch.demo.repository.MedicalRecordRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.rest.core.annotation.HandleAfterSave;
@@ -19,16 +18,11 @@ import java.util.List;
 @RepositoryEventHandler
 public class MedicalRecordEventHandler {
 
-    private final MedicalRecordRepository medicalRecordRepository;
     private static final Logger logger = LoggerFactory.getLogger(MedicalRecordEventHandler.class);
 
     // Authorities
     private static final String ROLE_SHELTER_VOLUNTEER = "ROLE_SHELTER_VOLUNTEER";
     private static final String ROLE_ADMIN = "ROLE_ADMIN";
-
-    public MedicalRecordEventHandler(MedicalRecordRepository medicalRecordRepository) {
-        this.medicalRecordRepository = medicalRecordRepository;
-    }
 
     /**
      * Handles actions before creating a medical record.
