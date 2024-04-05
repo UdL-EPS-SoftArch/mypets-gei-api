@@ -5,7 +5,7 @@ Feature: Process Adoption (User)
 
   Background:
     Given There is a registered user with username "username" and password "password" and email "user@sample.app"
-    And There is an available pet with name "pet"
+    Given There is an available pet with name "pet"
 
   Scenario: User is not logged in
     Given I'm not logged in

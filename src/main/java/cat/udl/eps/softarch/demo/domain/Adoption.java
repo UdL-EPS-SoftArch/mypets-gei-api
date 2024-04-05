@@ -32,6 +32,8 @@ public class Adoption extends UriEntity<Long> {
     private ZonedDateTime endDate;
 
     @ManyToOne
+    @JsonIdentityReference(alwaysAsId = true) // Only serialize the pet ID
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private User user; //Adopter
 
 

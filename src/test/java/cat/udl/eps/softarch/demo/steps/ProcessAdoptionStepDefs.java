@@ -40,9 +40,6 @@ public class ProcessAdoptionStepDefs {
 
 
 
-
-
-
     @And("I receive a confirmation message for adopting the pet")
     public void iReceiveAConfirmationMessageForAdoptingThePet() throws Throwable {
         result.andExpect(status().isOk())
@@ -69,36 +66,23 @@ public class ProcessAdoptionStepDefs {
 
     @When("I request to adopt the pet with name {string}")
     public void iRequestToAdoptThePetWithName(String arg0) throws Throwable {
+        Adoption adoption = new Adoption();
+        adoption.setPet(petRepository.findByName(arg0).get(0));
+        adoption.setUser(userRepository.findAll().iterator().next());
+        adoption.setStartDate(ZonedDateTime.now());
+        adoption.setConfirmed(false);
+        adoption.setType("Adoption");
+        adoption.setEndDate(null);
 
-        List<Pet> pets = petRepository.findByName(arg0);
-        if (!pets.isEmpty()) {
-            Pet petToAdopt = pets.get(0);
-            // Proceed with adoption logic
-            Adoption adoption = new Adoption();
-            adoption.setPet(petToAdopt);
-            adoption.setUser(user);
-            adoption.setStartDate(ZonedDateTime.now());
-            adoption.setConfirmed(false);
-            adoption.setType("Adoption");
-            adoption.setEndDate(null);
+        stepDefs.result = stepDefs.mockMvc.perform(
+                        post("/adoptions")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(stepDefs.mapper.writeValueAsString(adoption))
+                                .characterEncoding(StandardCharsets.UTF_8)
+                                .with(AuthenticationStepDefs.authenticate()))
+                .andDo(print());
 
-            stepDefs.result = stepDefs.mockMvc.perform(
-                            post("/adoptions")
-                                    .contentType(MediaType.APPLICATION_JSON)
-                                    .content(stepDefs.mapper.writeValueAsString(adoption))
-                                    .characterEncoding(StandardCharsets.UTF_8)
-                                    .with(AuthenticationStepDefs.authenticate()))
-                    .andDo(print());
-        } else {
-            // Handle case where pet with the given name is not found
-            stepDefs.result = stepDefs.mockMvc.perform(
-                            post("/adoptions")
-                                    .contentType(MediaType.APPLICATION_JSON)
-                                    .content("Pet not found")
-                                    .characterEncoding(StandardCharsets.UTF_8)
-                                    .with(AuthenticationStepDefs.authenticate()))
-                    .andDo(print());
-        }
+
 
     }
 
@@ -127,7 +111,7 @@ public class ProcessAdoptionStepDefs {
     public void iRequestToAdoptWithoutAPet() throws Throwable{
         // Proceed with adoption logic
         Adoption adoption = new Adoption();
-
+        adoption.setUser(userRepository.findAll().iterator().next());
         adoption.setStartDate(ZonedDateTime.now());
         adoption.setConfirmed(false);
         adoption.setType("Adoption");
