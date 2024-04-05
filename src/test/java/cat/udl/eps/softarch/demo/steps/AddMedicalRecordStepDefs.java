@@ -19,20 +19,29 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 
 
 public class AddMedicalRecordStepDefs {
-
-
-
-    @Autowired
-    MedicalRecordRepository medicalRecordRepository;
-
+    
     @Autowired
     private StepDefs stepDefs;
+    
+    @Autowired
+    PetRepository petRepository;
 
-    Pet pet;
 
     @Given("a pet exists in the system")
     public void aPetExistsInTheSystem() {
-        pet = new Pet();
+        var pet = new Pet();
+
+        pet.setName("Buddy");
+        pet.setAdopted(false); // Assuming false for a new entry, adjust as needed
+        pet.setColor("Brown");
+        pet.setSize("Medium");
+        pet.setWeight(20.5); // Example weight in kilograms
+        pet.setAge("5 years");
+        pet.setDescription("Friendly and loves to play fetch");
+        pet.setBreed("Labrador Retriever");
+
+        petRepository.save(pet); // Save the pet to the database
+        
     }
 
     @When("I add a new medical record for a pet with issue {string}, description {string}, and date {string}")
@@ -41,7 +50,7 @@ public class AddMedicalRecordStepDefs {
         newRecord.setDescription(description);
         newRecord.setIssue(issue);
         newRecord.setDate(ZonedDateTime.parse(date));
-        newRecord.setPet(pet);
+        //newRecord.setPet(petRepository.findAll().iterator().next());
         
         // Mock a POST request to /medicalRecords
         stepDefs.result = stepDefs.mockMvc.perform(
@@ -51,18 +60,19 @@ public class AddMedicalRecordStepDefs {
                                 .characterEncoding(StandardCharsets.UTF_8)
                                 .with(AuthenticationStepDefs.authenticate()))
                 .andDo(print());
+        
     }
 
 
 
     @When("I add a new medical record for a pet with issue {string}, description {string} and no date")
-    public void iAddANewMedicalRecordForAPetWithIssueDescriptionAndNoDate(String issue, String description) throws Exception {
-        // Assuming that MedicalRecord has a constructor that does not require a date or it's nullable
+    public void iAddANewMedicalRecordForAPetWithIssueDescriptionAndNoDate(String issue, String description) throws Throwable {
+        // Assuming that MedicalRecord has a constructor that does not require a date, or it's nullable
         MedicalRecord recordWithoutDate = new MedicalRecord();
-        //recordWithoutDate.setDescription(description);
+        recordWithoutDate.setDescription(description);
         recordWithoutDate.setIssue(issue);
         
-        recordWithoutDate.setPet(pet);
+        //recordWithoutDate.setPet(petRepository.findAll().iterator().next());
 
         // Simulate the action of adding a record without a date through a REST call
         stepDefs.result = stepDefs.mockMvc.perform(
@@ -76,13 +86,12 @@ public class AddMedicalRecordStepDefs {
 
     @When("I try to add a medical record for a pet")
     public void iTryToAddAMedicalRecordForAPet() throws Exception {
-        // Attempt to add a medical record without specifying role or permissions
         MedicalRecord medicalRecord = new MedicalRecord();
         medicalRecord.setDescription("Description");
         medicalRecord.setIssue("Issue");
         medicalRecord.setDate(ZonedDateTime.now());
-        medicalRecord.setPet(pet); // Simplification for example purposes
-
+        //medicalRecord.setPet(petRepository.findAll().iterator().next());
+        
         stepDefs.result = stepDefs.mockMvc.perform(
                         post("/medicalRecords")
                                 .contentType(MediaType.APPLICATION_JSON)

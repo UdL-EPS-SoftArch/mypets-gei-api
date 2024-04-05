@@ -21,7 +21,7 @@ import java.util.List;
 @RepositoryEventHandler()
 public class MedicalRecordEventHandler {
 
-    private final MedicalRecordRepository medicalRecordRepository;
+    final MedicalRecordRepository medicalRecordRepository;
     private static final Logger logger = LoggerFactory.getLogger(MedicalRecordEventHandler.class);
 
     public MedicalRecordEventHandler(MedicalRecordRepository medicalRecordRepository) {

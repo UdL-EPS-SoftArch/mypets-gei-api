@@ -8,6 +8,7 @@ Feature: Add Medical Record
     Given There is a registered user with username "user" and password "password" and email "user@sample.app"
     Given There is a registered admin with name "admin" and password "password" and email "admin@sample.app"
     Given There is a registered volunteer with name "volunteer" and password "password" and email "volunteer@sample.app"
+    
 
   Scenario: Add a valid medical record to an existing pet as Volunteer
     Given I login as "volunteer" with password "password"
