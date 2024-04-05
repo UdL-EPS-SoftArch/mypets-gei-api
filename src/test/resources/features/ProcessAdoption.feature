@@ -15,7 +15,7 @@ Feature: Process Adoption (User)
   Scenario: Process adoption request for available pet
     Given I login as "username" with password "password"
     When I request to adopt the pet with name "pet"
-    Then The response code is 200
+    Then The response code is 201
 
 
   Scenario: Process adoption request without pet

@@ -2,6 +2,7 @@ package cat.udl.eps.softarch.demo.handler;
 
 import cat.udl.eps.softarch.demo.domain.Adoption;
 import cat.udl.eps.softarch.demo.domain.User;
+import cat.udl.eps.softarch.demo.exceptions.InvalidPostRequest;
 import org.springframework.data.rest.core.annotation.HandleAfterSave;
 import org.springframework.data.rest.core.annotation.HandleBeforeCreate;
 import org.springframework.security.core.Authentication;
@@ -12,6 +13,8 @@ import org.slf4j.LoggerFactory;
 
 import java.util.Arrays;
 import java.util.List;
+
+
 
 public class ProcessAdoptionHandler {
 
@@ -25,15 +28,20 @@ public class ProcessAdoptionHandler {
     @HandleBeforeCreate
     public void handleAdoptionBeforeCreate(Adoption adoption) throws UnauthorizedAccessException {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        User user;
 
-        if(!isAuthorized(authentication)) {
+
+        if(!isAuthorized(authentication) ) {
             String userName = authentication != null ? authentication.getName() : "anonymous";
             String errorMessage = String.format("Unauthorized attempt to create an adoption by user: %s", userName);
             logger.error(errorMessage);
             throw new UnauthorizedAccessException();
         }
+        else if (adoption.getPet().isAdopted() || adoption.getConfirmed()) {
+            logger.error("Pet {} is already  or bad request", adoption.getPet().getName());
+            throw new InvalidPostRequest();
+        }
 
+        adoption.getPet().setAdopted(true);
         logger.info("Adoption for pet {} created successfully by user {}", adoption.getPet().getName(), authentication.getName());
     }
 
