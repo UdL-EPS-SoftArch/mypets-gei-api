@@ -36,6 +36,8 @@ public class ProcessAdoptionStepDefs {
     @Autowired
     PetRepository petRepository;
 
+    Adopt
+
     protected ResultActions result;
 
 
@@ -101,6 +103,11 @@ public class ProcessAdoptionStepDefs {
             pet.setDescription("description");
             pet.setBreed("breed");
             petRepository.save(pet);
+
+            Adoption adoption = new Adoption();
+            adoption.setPet(petRepository.findAll().iterator().next());
+            adoptionR
+
 
     }
 
