@@ -1,0 +1,107 @@
+package cat.udl.eps.softarch.demo.steps;
+
+
+import cat.udl.eps.softarch.demo.domain.Adoption;
+import cat.udl.eps.softarch.demo.domain.Pet;
+import cat.udl.eps.softarch.demo.domain.User;
+import cat.udl.eps.softarch.demo.repository.PetRepository;
+import cat.udl.eps.softarch.demo.repository.UserRepository;
+import io.cucumber.java.en.And;
+import io.cucumber.java.en.Given;
+import io.cucumber.java.en.When;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
+import org.springframework.test.web.servlet.ResultActions;
+
+import java.nio.charset.StandardCharsets;
+import java.time.ZonedDateTime;
+
+import static org.hamcrest.Matchers.is;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+@SuppressWarnings("ALL")
+public class ProcessAdoptionStepDefs {
+
+
+    @Autowired
+    StepDefs stepDefs;
+
+    @Autowired
+    UserRepository userRepository;
+
+    @Autowired
+    PetRepository petRepository;
+
+    protected ResultActions result;
+
+
+
+    User user;
+
+
+    @And("I receive a confirmation message for adopting the pet")
+    public void iReceiveAConfirmationMessageForAdoptingThePet() throws Throwable {
+        result.andExpect(status().isOk())
+                .andExpect(jsonPath("$.message", is("Adoption successful")));
+
+    }
+
+    @Given("There is an available pet with name {string}")
+    public void thereIsAnAvailablePetWithName(String arg0) {
+        if (petRepository.findByName(arg0).isEmpty() || petRepository.findByName(arg0).get(0).isAdopted()){
+            Pet pet = new Pet();
+            pet.setName(arg0);
+            pet.setAdopted(false);
+            pet.setColor("color");
+            pet.setSize("size");
+            pet.setWeight(1.0);
+            pet.setAge("age");
+            pet.setDescription("description");
+            pet.setBreed("breed");
+            petRepository.save(pet);
+        }
+
+    }
+
+    @When("I request to adopt the pet with name {string}")
+    public void iRequestToAdoptThePetWithName(String arg0) throws Throwable {
+
+        Adoption adoption = new Adoption();
+        adoption.setPet(petRepository.findByName(arg0).get(0));
+        adoption.setUser(user);
+        adoption.setStartDate(ZonedDateTime.now());
+
+
+        stepDefs.result = stepDefs.mockMvc.perform(
+                        post("/adoptions")
+                                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                                .content(stepDefs.mapper.writeValueAsString(adoption))
+                                .characterEncoding(StandardCharsets.UTF_8)
+                                .with(AuthenticationStepDefs.authenticate()))
+                .andDo(print());
+
+    }
+
+
+
+    @Given("There is a pet with name {string} and it is already adopted")
+    public void thereIsAPetWithNameAndItIsAlreadyAdopted(String arg0) {
+        if (!petRepository.findByName(arg0).isEmpty() || !petRepository.findByName(arg0).get(0).isAdopted()){
+            Pet pet = new Pet();
+            pet.setName("pet");
+            pet.setAdopted(true);
+            pet.setColor("color");
+            pet.setSize("size");
+            pet.setWeight(1.0);
+            pet.setAge("age");
+            pet.setDescription("description");
+            pet.setBreed("breed");
+            petRepository.save(pet);
+        }
+    }
+
+
+}
