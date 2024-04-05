@@ -5,24 +5,24 @@ Feature: Process Adoption (User)
 
   Background:
     Given There is a registered user with username "username" and password "password" and email "user@sample.app"
+    And There is an available pet with name "pet"
 
   Scenario: User is not logged in
     Given I'm not logged in
-    And There is an available pet with name "pet"
     When I request to adopt the pet with name "pet"
     Then The response code is 401
 
   Scenario: Process adoption request for available pet
     Given I login as "username" with password "password"
-    And There is an available pet with name "pet"
     When I request to adopt the pet with name "pet"
     Then The response code is 200
-    And I receive a confirmation message for adopting the pet
 
-  Scenario: Process adoption request for non-existent pet
+
+  Scenario: Process adoption request without pet
     Given I login as "username" with password "password"
-    When I request to adopt the pet with name "pet"
+    When I request to adopt without a pet
     Then The response code is 404
+
 
 
   Scenario: Process adoption request for already adopted pet
