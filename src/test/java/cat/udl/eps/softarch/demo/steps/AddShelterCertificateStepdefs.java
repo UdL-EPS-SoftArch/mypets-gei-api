@@ -25,7 +25,7 @@ public class AddShelterCertificateStepdefs {
         Shelter shelter = this.shelterRepository.findByName(shelterName).get(0);
 
         stepDefs.result = stepDefs.mockMvc.perform(
-                post("/shelterCertificates/", shelterName)
+                post("/shelterCertificates")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(new JSONObject()
                                 .put("expirationDate", ZonedDateTime.now().plusMonths(1))
