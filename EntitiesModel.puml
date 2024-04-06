@@ -90,6 +90,11 @@ class MedicalRecord {
     date : Date
 }
 
+class FavouritedPets {
+    id : Long
+    petId : Long
+}
+
 
 Pet "1" -- "*" MedicalRecord : has >
 
@@ -104,4 +109,5 @@ Client "*" -> "*" Shelter : donate >
 Adoption "*" -> "1" Pet :adopted >
 Adoption "*" -> "1" User :adopt <
 ShelterVolunteer "1.*" -> "*" Shelter : works >
+User "1" -> "*" FavouritedPets : hasFavourited >
 @enduml

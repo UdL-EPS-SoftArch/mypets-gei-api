@@ -1,5 +1,7 @@
 package cat.udl.eps.softarch.demo.domain;
 
+import com.fasterxml.jackson.annotation.JsonIdentityReference;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -14,7 +16,7 @@ import java.time.ZonedDateTime;
 public class MedicalRecord extends UriEntity<Long> {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue()
     private Long id;
 
     @NotBlank
@@ -27,5 +29,7 @@ public class MedicalRecord extends UriEntity<Long> {
     private ZonedDateTime date;
     
     @ManyToOne
+    @JsonIdentityReference(alwaysAsId = true) // Only serialize the pet ID
+    @JsonInclude(JsonInclude.Include.NON_NULL) // Include pet only if it's not null
     private Pet pet;
 }
