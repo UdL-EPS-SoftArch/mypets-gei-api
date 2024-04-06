@@ -49,6 +49,8 @@ public class ProcessAdoptionEventHandler {
     }
 
 
+
+
     // This function allows to check if the user is authorized to perform the action
     private boolean isAuthorized(Authentication authentication) {
         if (authentication == null || !authentication.isAuthenticated()) {

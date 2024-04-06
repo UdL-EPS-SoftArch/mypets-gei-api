@@ -62,9 +62,6 @@ public class ProcessAdoptionStepDefs {
         pet.setBreed("breed");
         petRepository.save(pet);
 
-
-
-
     }
 
     @When("I request to adopt the pet with name {string}")

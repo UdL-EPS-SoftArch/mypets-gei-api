@@ -26,9 +26,9 @@ public class ValidateAdoptionEventHandler {
     private static final String ROLE_SHELTER_VOLUNTEER = "ROLE_SHELTER_VOLUNTEER";
     private static final String ROLE_ADMIN = "ROLE_ADMIN";
 
-    // This function is called before creating an adoption
+    // This function is called before saving an adoption
     @HandleBeforeSave
-    public void handleAdoptionBeforeCreate(Adoption adoption) throws UnauthorizedAccessException, InvalidPostRequest {
+    public void handleAdoptionBeforeSave(Adoption adoption) throws UnauthorizedAccessException, InvalidPostRequest {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
         // If the user is not authorized, an exception is thrown
