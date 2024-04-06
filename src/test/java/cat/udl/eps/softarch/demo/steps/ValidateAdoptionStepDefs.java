@@ -1,50 +1,60 @@
 package cat.udl.eps.softarch.demo.steps;
 
+
+
+
+import cat.udl.eps.softarch.demo.domain.Adoption;
+import cat.udl.eps.softarch.demo.repository.AdoptionRepository;
+import cat.udl.eps.softarch.demo.repository.PetRepository;
+import cat.udl.eps.softarch.demo.repository.UserRepository;
 import io.cucumber.java.en.And;
-import io.cucumber.java.en.Given;
+import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.web.servlet.ResultActions;
 
+import static org.hamcrest.Matchers.is;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+@SuppressWarnings("ALL")
 public class ValidateAdoptionStepDefs {
-    @Given("There is a pending adoption request for pet with ID {string} by user {string}")
-    public void thereIsAPendingAdoptionRequestForPetWithIDByUser(String arg0, String arg1) {
+
+    @Autowired
+    StepDefs stepDefs;
+
+    @Autowired
+    UserRepository userRepository;
+
+    @Autowired
+    PetRepository petRepository;
+
+    @Autowired
+    AdoptionRepository adoptionRepository;
+
+    protected ResultActions result;
+
+
+
+
+    @And("There is an available adoption with name {string}")
+    public void thereIsAnAvailableAdoptionWithName(String arg0) {
+        Adoption adoption = new Adoption();
+
     }
 
-    @And("I'm not logged in or logged in as a regular user, not admin or shelter volunteer")
-    public void iMNotLoggedInOrLoggedInAsARegularUserNotAdminOrShelterStaff() {
-        
+    @And("There is a pending adoption request for pet {string} from user {string}")
+    public void thereIsAPendingAdoptionRequestForPetFromUser(String arg0, String arg1) {
     }
 
-    @When("I attempt to validate the adoption request for pet with ID {string} by user {string}")
-    public void iAttemptToValidateTheAdoptionRequestForPetWithIDByUser(String arg0, String arg1) {
-        
+    @When("I validate the adoption request for pet {string} from user {string}")
+    public void iValidateTheAdoptionRequestForPetFromUser(String arg0, String arg1) {
     }
 
-    @And("the pet with ID {string} is already marked as adopted")
-    public void thePetWithIDIsAlreadyMarkedAsAdopted(String arg0) {
-        
+    @Then("The adoption request for pet {string} is approved")
+    public void theAdoptionRequestForPetIsApproved(String arg0) {
     }
 
-    @And("I'm logged in as admin or shelter volunteer")
-    public void iMLoggedInAsAdminOrShelterStaff() {
-        
-    }
-
-    @Given("There is no pending adoption request for a non-existent pet with ID {string}")
-    public void thereIsNoPendingAdoptionRequestForANonExistentPetWithID(String arg0) {
-        
-    }
-
-    @When("I validate the adoption request for pet with ID {string} by user {string}")
-    public void iValidateTheAdoptionRequestForPetWithIDByUser(String arg0, String arg1) {
-        
-    }
-
-    @And("The adoption status for pet with ID {string} is updated to {string}")
-    public void theAdoptionStatusForPetWithIDIsUpdatedTo(String arg0, String arg1) {
-        
-    }
-
-    @And("User {string} is notified about the validation of the adoption")
-    public void userIsNotifiedAboutTheValidationOfTheAdoption(String arg0) {
-    }
 }

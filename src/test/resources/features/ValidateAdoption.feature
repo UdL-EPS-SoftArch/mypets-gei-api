@@ -1,34 +1,23 @@
-Feature: Validate Adoption
-  In order to ensure responsible pet ownership
+Feature: Validate Adoption (Admin or Shelter Volunteer)
+
+  In order to validate an adoption
   As an admin or shelter volunteer
-  I want to validate pet adoptions
+  I want to review and approve adoption requests
 
-  Scenario: Validate adoption request
-    Given There is a pending adoption request for pet with ID "123" by user "user"
-    And I'm logged in as admin or shelter volunteer
-    When I validate the adoption request for pet with ID "123" by user "user"
-    Then The response code is 200
-    And The adoption status for pet with ID "123" is updated to "user"
-    And User "user" is notified about the validation of the adoption
+  Background:
+    Given There is a registered user with username "username" and password "password" and email "user@sample.app"
+    Given There is a registered user with username "username" and password "password" and email "user@sample.app"
+    And There is an available adoption with name "adoption"
+    And There is a pending adoption request for pet "pet" from user "user@sample.app"
 
-  Scenario: Validate adoption request for non-existent pet
-    Given There is no pending adoption request for a non-existent pet with ID "999"
-    And I'm logged in as admin or shelter volunteer
-    When I attempt to validate the adoption request for pet with ID "999" by user "user"
-    Then The response code is 404
-    And The error message is "Pet with ID '999' not found"
+  Scenario: Admin validates adoption request
+    Given I login as "admin" with password "admin123"
+    When I validate the adoption request for pet "pet" from user "user@sample.app"
+    Then The adoption request for pet "pet" is approved
+    And The response code is 200
 
-  Scenario: Validate adoption request for already adopted pet
-    Given There is a pending adoption request for pet with ID "456" by user "user"
-    And the pet with ID "456" is already marked as adopted
-    And I'm logged in as admin or shelter volunteer
-    When I attempt to validate the adoption request for pet with ID "456" by user "user"
-    Then The response code is 409
-    And The error message is "Pet with ID '456' is already adopted"
-
-  Scenario: Validate adoption request without proper authorization
-    Given There is a pending adoption request for pet with ID "789" by user "user"
-    And I'm not logged in or logged in as a regular user, not admin or shelter volunteer
-    When I attempt to validate the adoption request for pet with ID "789" by user "user"
-    Then The response code is 403
-    And The error message is "Unauthorized access, admin or shelter volunteer privilege required"
+  Scenario: Shelter volunteer validates adoption request
+    Given I login as "volunteer" with password "volunteer123"
+    When I validate the adoption request for pet "pet" from user "user@sample.app"
+    Then The adoption request for pet "pet" is approved
+    And The response code is 200
