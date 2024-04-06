@@ -2,7 +2,6 @@ package cat.udl.eps.softarch.demo.steps;
 
 import cat.udl.eps.softarch.demo.domain.FavouritedPets;
 import cat.udl.eps.softarch.demo.domain.Pet;
-import cat.udl.eps.softarch.demo.domain.User;
 import cat.udl.eps.softarch.demo.repository.FavouritedPetsRepository;
 import cat.udl.eps.softarch.demo.repository.PetRepository;
 import cat.udl.eps.softarch.demo.repository.UserRepository;
@@ -15,9 +14,9 @@ import org.springframework.http.MediaType;
 
 import java.nio.charset.StandardCharsets;
 import java.util.List;
-import java.util.Optional;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 
 public class modifyFavouriteStepDefs {
@@ -45,31 +44,6 @@ public class modifyFavouriteStepDefs {
         }
     }
 
-    @Given("^The pet with id \"([^\"]*)\" was favourited by the user \"([^\"]*)\"$")
-    public void thePetWithIdWasFavouritedByTheUser(Long petId, String username) throws Throwable {
-        FavouritedPets toFavourite;
-        if (petRepository.existsById(petId)) {
-            toFavourite = new FavouritedPets();
-            toFavourite.setPetId(petId);
-            toFavourite.setUserId(username);
-        } else {
-            toFavourite = null;
-        }
-        //We need authentication for the "put" action...
-        AuthenticationStepDefs.currentUsername = username;
-        AuthenticationStepDefs.currentPassword = "password";
-        stepDefs.mockMvc.perform(
-                        put("/favouritedPets")
-                                .contentType(MediaType.APPLICATION_JSON)
-                                .content(stepDefs.mapper.writeValueAsString(toFavourite))
-                                .characterEncoding(StandardCharsets.UTF_8)
-                                .with(AuthenticationStepDefs.authenticate()))
-                .andDo(print());
-        //... so we remove it afterwards to not mess with the other tests
-        AuthenticationStepDefs.currentUsername = "";
-        AuthenticationStepDefs.currentPassword = "";
-    }
-
     @Given("^User \"([^\"]*)\" has pet \"([^\"]*)\" set as favourite$")
     public void userHasPetSetAsFavourite(String userId, Long petId) throws Throwable {
         FavouritedPets newPet;
@@ -91,17 +65,6 @@ public class modifyFavouriteStepDefs {
 
     @When("^I press the favouritePet button for the pet with id \"([^\"]*)\"$")
     public void iPressTheFavouriteButton(Long favouritedPet) throws Throwable {
-        //I'm not logged in case
-        if (AuthenticationStepDefs.currentUsername == null) {
-            return;
-        }
-
-        Optional<User> user = userRepository.findById(AuthenticationStepDefs.currentUsername);
-        if (user.isEmpty()) {
-            System.out.println("User not found or authentication failed."); // Add a debug message
-            return;
-        }
-
         //Needed later for checking correct operation
         petId = favouritedPet;
 
@@ -114,17 +77,15 @@ public class modifyFavouriteStepDefs {
             for (FavouritedPets value : petList) {
                 if (favouritedPet.equals(value.getPetId())) {
                     found = true;
-                    stepDefs.result = stepDefs.mockMvc.perform(delete("/favouritedPets"));
+                    Long entryId = favouriteRepository.findByUserIdAndPetId(AuthenticationStepDefs.currentUsername, petId).get(0).getId();
+                    stepDefs.result = stepDefs.mockMvc.perform(delete(String.format("/favouritedPets/%s", entryId)));
                 }
             }
         }
         if (!found) {
-            Pet newPet = new Pet();
-            newPet.setId(favouritedPet);
-            newPet.setName("Rex");
-            newPet.setAge("9");
-            newPet.setColor("blue");
-            newPet.setAdopted(true);
+            FavouritedPets newPet = new FavouritedPets();
+            newPet.setPetId(favouritedPet);
+            newPet.setUserId(AuthenticationStepDefs.currentUsername);
             stepDefs.result = stepDefs.mockMvc.perform(
                             post("/favouritedPets")
                                     .contentType(MediaType.APPLICATION_JSON)

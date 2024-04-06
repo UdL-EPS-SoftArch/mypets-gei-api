@@ -10,6 +10,5 @@ import java.util.List;
 public interface FavouritedPetsRepository extends CrudRepository<FavouritedPets, Long>, PagingAndSortingRepository<FavouritedPets, Long> {
     List<FavouritedPets> findByPetId(@Param("petId") Long petId);
     List<FavouritedPets> findByUserId(@Param("userId") String userId);
-
-    boolean existsByPetId(Long petToCreate);
+    List<FavouritedPets> findByUserIdAndPetId(@Param("userId") String userId,@Param("petId") Long petId);
 }
