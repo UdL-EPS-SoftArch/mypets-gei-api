@@ -15,4 +15,4 @@ Feature: Add Shelter Certificate
     Scenario: Adding a Shelter Certificate as a non Shelter Volunteer
         Given I cannot login with username "test" and password "wrongPassword"
         When I add a Shelter Certificate with valid expiration date to the shelter with name "test"
-        Then The response code is 403
+        Then The response code is 401
