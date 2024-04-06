@@ -14,5 +14,6 @@ public class FavouritedPets extends UriEntity<Long> {
     @NotNull
     Long id;
 
+    String userId;
     Long petId;
 }
