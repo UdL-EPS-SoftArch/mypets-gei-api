@@ -1,12 +1,10 @@
 package cat.udl.eps.softarch.demo.domain;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-
+import com.fasterxml.jackson.annotation.JsonValue;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
-
-import com.fasterxml.jackson.annotation.JsonValue;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.hibernate.validator.constraints.Length;
@@ -43,8 +41,19 @@ public class User extends UriEntity<String> implements UserDetails {
 	@JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
 	private boolean passwordReset;
 
+	@JsonProperty(access = JsonProperty.Access.READ_ONLY)
+	private boolean locked;
+
 	public void encodePassword() {
 		this.password = passwordEncoder.encode(this.password);
+	}
+
+	public void lock() {
+		this.locked = true;
+	}
+
+	public void unlock() {
+		this.locked = false;
 	}
 
 	@Override
@@ -64,7 +73,7 @@ public class User extends UriEntity<String> implements UserDetails {
 
 	@Override
 	public boolean isAccountNonLocked() {
-		return true;
+		return !locked;
 	}
 
 	@Override
@@ -77,7 +86,7 @@ public class User extends UriEntity<String> implements UserDetails {
 		return true;
 	}
 
-	@ManyToMany
-	public List<Pet> favouritedPets;
+	@OneToMany(fetch = FetchType.EAGER)
+	public List<FavouritedPets> favouritedPets;
 
 }
