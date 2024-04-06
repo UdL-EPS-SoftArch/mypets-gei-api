@@ -28,13 +28,18 @@ public class WebSecurityConfig {
     protected SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.authorizeHttpRequests((auth) -> auth
                 .requestMatchers(HttpMethod.GET, "/identity").authenticated()
+                .requestMatchers(HttpMethod.DELETE, "/shelterVolunteers/*").hasAnyRole("SHELTER_VOLUNTEER")
                 .requestMatchers(HttpMethod.POST, "/users").anonymous()
                 .requestMatchers(HttpMethod.POST, "/users/*").denyAll()
-                .requestMatchers(HttpMethod.POST, "/**/*").authenticated()
                 .requestMatchers(HttpMethod.PUT, "/**/*").authenticated()
                 .requestMatchers(HttpMethod.PATCH, "/**/*").authenticated()
+                .requestMatchers(HttpMethod.DELETE, "/shelters/*").hasRole("ADMIN")
+                .requestMatchers(HttpMethod.DELETE, "/pets/*").hasAnyRole("SHELTER_VOLUNTEER", "ADMIN")
                 .requestMatchers(HttpMethod.DELETE, "/**/*").authenticated()
-                .anyRequest().permitAll())
+                .requestMatchers(HttpMethod.POST, "/shelters/**").hasAuthority("ROLE_ADMIN")
+                .requestMatchers(HttpMethod.POST, "/**/*").authenticated()
+
+                        .anyRequest().permitAll())
             .csrf((csrf) -> csrf.disable())
             .sessionManagement((session) -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .cors((cors) -> cors.configurationSource(corsConfigurationSource()))
