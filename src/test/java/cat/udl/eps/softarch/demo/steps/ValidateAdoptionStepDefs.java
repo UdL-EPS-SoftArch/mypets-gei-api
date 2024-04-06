@@ -7,9 +7,7 @@ import cat.udl.eps.softarch.demo.domain.Adoption;
 import cat.udl.eps.softarch.demo.repository.AdoptionRepository;
 import cat.udl.eps.softarch.demo.repository.PetRepository;
 import cat.udl.eps.softarch.demo.repository.UserRepository;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import io.cucumber.java.en.And;
-import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -39,8 +37,8 @@ public class ValidateAdoptionStepDefs {
     protected ResultActions result;
 
 
-    @And("There is a dog with a pending adoption request from user {string}")
-    public void thereIsAPendingAdoptionRequestForPetFromUser(String arg0) {
+    @And("There is a dog with a pending adoption request from an user")
+    public void thereIsAPendingAdoptionRequestForPetFromUser() {
         Pet pet = new Pet();
         pet.setName("Pet");
         pet.setAdopted(false);
@@ -57,7 +55,7 @@ public class ValidateAdoptionStepDefs {
         adoption.setConfirmed(false);
         adoption.setStartDate(ZonedDateTime.now());
         adoption.setUser(userRepository.findAll().iterator().next());
-        adoption.setPet(pet);
+        adoption.setPet(petRepository.findAll().iterator().next());
         adoption.setType("Adoption");
         adoption.setEndDate(null);
         adoptionRepository.save(adoption);
@@ -66,11 +64,13 @@ public class ValidateAdoptionStepDefs {
 
     @When("I validate the adoption request")
     public void iValidateTheAdoptionRequestForPetFromUser() throws Throwable {
+        Adoption existingAdoption = adoptionRepository.findAll().iterator().next();
+        existingAdoption.setConfirmed(true);
 
         stepDefs.result = stepDefs.mockMvc.perform(
-                        put("/adoptions")
+                        put("/adoptions/" + existingAdoption.getId())
                                 .contentType(MediaType.APPLICATION_JSON)
-                                .content(stepDefs.mapper.writeValueAsString(adoptionRepository.findAll().iterator().next()))
+                                .content(stepDefs.mapper.writeValueAsString(existingAdoption))
                                 .characterEncoding(StandardCharsets.UTF_8)
                                 .with(AuthenticationStepDefs.authenticate()))
                 .andDo(print());
