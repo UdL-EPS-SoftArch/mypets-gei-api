@@ -56,8 +56,8 @@ public class ValidateAdoptionStepDefs {
         Adoption adoption = new Adoption();
         adoption.setConfirmed(false);
         adoption.setStartDate(ZonedDateTime.now());
-        adoption.setUser(userRepository.findById(arg0).get());
-        adoption.setPet(petRepository.findAll().iterator().next());
+        adoption.setUser(userRepository.findAll().iterator().next());
+        adoption.setPet(pet);
         adoption.setType("Adoption");
         adoption.setEndDate(null);
         adoptionRepository.save(adoption);
