@@ -17,14 +17,21 @@ public class ViewCatalogueStepDefs {
 
     @When("I request the Catalogue")
     public void viewCatalogue() throws Exception {
-        stepDefs.result = stepDefs.mockMvc.perform(get("/pets/search?isAdopted=false")
+        stepDefs.result = stepDefs.mockMvc.perform(get("/pets/search/findByIsAdopted?isAdopted=false")
                         .accept(MediaType.APPLICATION_JSON))
+                .andDo(print());
+    }
+
+    @When("I request the catalogue for the specific shelter {string}")
+    public void viewShelterCatalogue(String shelter) throws Exception {
+        stepDefs.result = stepDefs.mockMvc.perform(get("/pets/search/findByShelter?Shelter={shelter}", shelter)
+                .accept(MediaType.APPLICATION_JSON))
                 .andDo(print());
     }
 
     @When("I request the Catalogue with breed {string}")
     public void viewCataloguewithBreed(String breed) throws Exception{
-        stepDefs.result = stepDefs.mockMvc.perform(get("/pets/search?breed={breed}", breed)
+        stepDefs.result = stepDefs.mockMvc.perform(get("/pets/search/findByBreed?breed={breed}", breed)
                 .accept(MediaType.APPLICATION_JSON))
                 .andDo(print());
     }

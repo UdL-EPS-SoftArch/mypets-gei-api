@@ -1,14 +1,8 @@
 # Created by globox97 at 11/03/2024
 Feature: View Pets Catalogue
-  In order to view the Pets Catalogue
+  In order to choose a pet to adopt from those available
   As a User
   I want to view the pet catalogue
-
-  Background:
-    Given there is a registered client with username "client" and password "password" and email "user@domain.com"
-    Given there is a registered volunteer with username "volunteer" and password "password" and email "volunteer@domain.com"
-    And There is a Pet with breed "cat"
-    And There is a Pet with breed "dog"
 
 
   Scenario: View Pets Catalogue without being logged in
@@ -27,7 +21,8 @@ Feature: View Pets Catalogue
     Then The response code is 200
 
   Scenario: View Pets Catalogue as a Shelter Volunteer
-    Given I'm logged in as a Volunteer
-    When I request the Catalogue
+    Given There is a registered shelter volunteer with username "volunteer" and password "password" and email "shelterv@sample.app"
+    Given I login with username "volunteer" and password "password"
+    When I request the Catalogue for the specific shelter
     Then I'm shown the Catalogue from the shelter I work in
     And The response code is 200
