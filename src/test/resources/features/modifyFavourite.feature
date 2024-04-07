@@ -18,7 +18,7 @@ Feature: Modify Favourite
     Given I login as "testuser" with password "password"
     Given User "testuser" has pet "12345679" set as favourite
     When I press the favouritePet button for the pet with id "12345679"
-    Then The response code is 201
+    Then The response code is 200
     And The entry on the relation "favourites" is deleted
 
   Scenario: Mark as favourite while i'm not logged in

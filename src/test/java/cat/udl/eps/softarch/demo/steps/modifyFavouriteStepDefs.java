@@ -55,7 +55,7 @@ public class modifyFavouriteStepDefs {
             newPet = null;
         }
         stepDefs.mockMvc.perform(
-                        post("/favouritedPets")
+                        post("/favouritedPetses")
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(stepDefs.mapper.writeValueAsString(newPet))
                                 .characterEncoding(StandardCharsets.UTF_8)
@@ -70,15 +70,16 @@ public class modifyFavouriteStepDefs {
 
         List<FavouritedPets> petList = favouriteRepository.findByUserId(AuthenticationStepDefs.currentUsername);
         boolean found = false;
-        System.out.println("Size of petList (mid):");
-        System.out.println(petList.size());
 
         if (!petList.isEmpty()) {
             for (FavouritedPets value : petList) {
                 if (favouritedPet.equals(value.getPetId())) {
                     found = true;
                     Long entryId = favouriteRepository.findByUserIdAndPetId(AuthenticationStepDefs.currentUsername, petId).get(0).getId();
-                    stepDefs.result = stepDefs.mockMvc.perform(delete(String.format("/favouritedPets/%s", entryId)));
+                    stepDefs.result = stepDefs.mockMvc.perform(delete(String.format("/favouritedPetses/%s", entryId))
+                                    .accept(MediaType.APPLICATION_JSON)
+                                    .with(AuthenticationStepDefs.authenticate()))
+                            .andDo(print());
                 }
             }
         }
@@ -87,7 +88,7 @@ public class modifyFavouriteStepDefs {
             newPet.setPetId(favouritedPet);
             newPet.setUserId(AuthenticationStepDefs.currentUsername);
             stepDefs.result = stepDefs.mockMvc.perform(
-                            post("/favouritedPets")
+                            post("/favouritedPetses")
                                     .contentType(MediaType.APPLICATION_JSON)
                                     .content(stepDefs.mapper.writeValueAsString(newPet))
                                     .characterEncoding(StandardCharsets.UTF_8)
