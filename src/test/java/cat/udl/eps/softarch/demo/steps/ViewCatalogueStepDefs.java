@@ -22,8 +22,8 @@ public class ViewCatalogueStepDefs {
                 .andDo(print());
     }
 
-    @When("I request the catalogue for the specific shelter {string}")
-    public void viewShelterCatalogue(String shelter) throws Exception {
+    @When("I request the Catalogue for the specific shelter {long}")
+    public void viewShelterCatalogue(Long shelter) throws Exception {
         stepDefs.result = stepDefs.mockMvc.perform(get("/pets/search/findByShelter?Shelter={shelter}", shelter)
                 .accept(MediaType.APPLICATION_JSON))
                 .andDo(print());
