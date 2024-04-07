@@ -13,6 +13,7 @@ public class Pet extends UriEntity<Long> {
     @NotNull
     Long id;
 
+    
     String name;
     boolean isAdopted;
     String color;
