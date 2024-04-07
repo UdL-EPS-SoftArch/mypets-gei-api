@@ -17,14 +17,17 @@ public class ShelterCertificate extends UriEntity<Long> {
     @GeneratedValue()
     private Long id;
 
-    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     @NotNull
     private ZonedDateTime expirationDate;
 
-    @NotNull
     private Boolean validated;
 
     @JsonIdentityReference(alwaysAsId = true)
     @ManyToOne
     private Shelter shelterServed;
+
+    @PrePersist()
+    public void prePersist() {
+        this.validated = false;
+    }
 }
