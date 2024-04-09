@@ -1,6 +1,5 @@
 package cat.udl.eps.softarch.demo.steps;
 
-
 import cat.udl.eps.softarch.demo.domain.Adoption;
 import cat.udl.eps.softarch.demo.domain.Pet;
 import cat.udl.eps.softarch.demo.repository.AdoptionRepository;
@@ -25,7 +24,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SuppressWarnings("ALL")
 public class ProcessAdoptionStepDefs {
 
-
     @Autowired
     StepDefs stepDefs;
 
@@ -40,12 +38,10 @@ public class ProcessAdoptionStepDefs {
 
     protected ResultActions result;
 
-
     @And("I receive a confirmation message for adopting the pet")
     public void iReceiveAConfirmationMessageForAdoptingThePet() throws Throwable {
         result.andExpect(status().isOk())
                 .andExpect(jsonPath("$.message", is("Adoption successful")));
-
     }
 
     @Given("There is an available pet with name {string} i want to adopt")
@@ -61,12 +57,10 @@ public class ProcessAdoptionStepDefs {
         pet.setDescription("description");
         pet.setBreed("breed");
         petRepository.save(pet);
-
     }
 
     @When("I request to adopt the pet with name {string}")
     public void iRequestToAdoptThePetWithName(String arg0) throws Throwable {
-
         Adoption adoption = new Adoption();
         adoption.setPet(petRepository.findByName(arg0).get(0));
         adoption.setUser(userRepository.findAll().iterator().next());
@@ -82,10 +76,7 @@ public class ProcessAdoptionStepDefs {
                                 .characterEncoding(StandardCharsets.UTF_8)
                                 .with(AuthenticationStepDefs.authenticate()))
                 .andDo(print());
-
     }
-
-
 
     @When("I request to adopt without a pet")
     public void iRequestToAdoptWithoutAPet() throws Throwable{
@@ -97,7 +88,6 @@ public class ProcessAdoptionStepDefs {
         adoption.setType("Adoption");
         adoption.setEndDate(null);
 
-
         stepDefs.result = stepDefs.mockMvc.perform(
                         post("/adoptions")
                                 .contentType(MediaType.APPLICATION_JSON)
@@ -105,12 +95,10 @@ public class ProcessAdoptionStepDefs {
                                 .characterEncoding(StandardCharsets.UTF_8)
                                 .with(AuthenticationStepDefs.authenticate()))
                 .andDo(print());
-
     }
 
     @And("The pet with name {string} is already adopted")
     public void thePetWithNameIsAlreadyAdopted(String arg0) {
-
         Pet pet = new Pet();
         pet.setName(arg0);
         pet.setAdopted(true);
@@ -121,7 +109,5 @@ public class ProcessAdoptionStepDefs {
         pet.setDescription("description");
         pet.setBreed("breed");
         petRepository.save(pet);
-
-
     }
 }
