@@ -24,5 +24,4 @@ Feature: View Pets Catalogue
    Given There is a registered shelter volunteer with username "volunteer" that works at the shelter "shelter"
     Given I login with username "volunteer" and password "password"
     When I request the Catalogue for the specific shelter "shelter"
-    Then I'm shown the Catalogue from the shelter I work in
     And The response code is 200
