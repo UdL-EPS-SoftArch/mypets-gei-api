@@ -1,6 +1,11 @@
 package cat.udl.eps.softarch.demo.steps;
 
+import cat.udl.eps.softarch.demo.domain.Shelter;
+import cat.udl.eps.softarch.demo.domain.ShelterVolunteer;
 import cat.udl.eps.softarch.demo.repository.PetRepository;
+import cat.udl.eps.softarch.demo.repository.ShelterRepository;
+import cat.udl.eps.softarch.demo.repository.ShelterVolunteerRepository;
+import io.cucumber.java.en.Given;
 import io.cucumber.java.en.When;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -14,6 +19,25 @@ public class ViewCatalogueStepDefs {
 
     @Autowired
     private PetRepository petRepository;
+
+    @Autowired
+    private ShelterVolunteerRepository shelterVolunteerRepository;
+
+    @Autowired
+    private ShelterRepository shelterRepository;
+
+
+    @Given("There is a registered shelter volunteer with username {string} that works at the shelter {long}")
+    public void thereIsAShelterVolunteer(String username, long shelterId) throws Exception {
+        if(shelterVolunteerRepository.findById(username).isEmpty()) {
+            ShelterVolunteer shelterVolunteer = new ShelterVolunteer();
+            Shelter shelter = new Shelter();
+            shelter.setId(shelterId);
+            shelterVolunteer.setUserShelter(shelter);
+            shelterRepository.save(shelter);
+            shelterVolunteerRepository.save(shelterVolunteer);
+        }
+    }
 
     @When("I request the Catalogue")
     public void viewCatalogue() throws Exception {

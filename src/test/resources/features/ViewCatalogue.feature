@@ -20,9 +20,9 @@ Feature: View Pets Catalogue
     When I request the Catalogue
     Then The response code is 200
 
-  #Scenario: View Pets Catalogue as a Shelter Volunteer
-   #Given There is a registered shelter volunteer with username "volunteer" and password "password" and email "shelterv@sample.app"
-    #Given I login with username "volunteer" and password "password"
-    #When I request the Catalogue for the specific shelter "shelter"
-    #Then I'm shown the Catalogue from the shelter I work in
-    #And The response code is 200
+  Scenario: View Pets Catalogue as a Shelter Volunteer
+   Given There is a registered shelter volunteer with username "volunteer" that works at the shelter "shelter"
+    Given I login with username "volunteer" and password "password"
+    When I request the Catalogue for the specific shelter "shelter"
+    Then I'm shown the Catalogue from the shelter I work in
+    And The response code is 200
