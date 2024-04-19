@@ -59,6 +59,8 @@ public class User extends UriEntity<String> implements UserDetails {
 	@Override
 	public String getUsername() { return id; }
 
+	public void setUsername(String username) { this.id = username; }
+
 	@Override
 	@JsonValue(value = false)
 	@JsonProperty(access = JsonProperty.Access.READ_ONLY)
