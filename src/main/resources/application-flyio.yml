@@ -1,4 +1,4 @@
-allowed-origins: "https://mypets-gei.fly.dev, https://deploy-preview-*--mypets-gei.fly.dev"
+allowed-origins: "https://mypets-gei.netlify.app, https://deploy-preview-*--mypets-gei.netlify.app"
 
 logging:
     level:

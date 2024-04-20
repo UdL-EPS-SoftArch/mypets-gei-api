@@ -12,7 +12,7 @@ import java.net.URISyntaxException;
  * Created by http://rhizomik.net/~roberto/
  */
 @Configuration
-@Profile("flyio")
+@Profile("flyio-db")
 public class DatabaseConfig {
     @Bean
     public DataSource dataSource() throws URISyntaxException {
