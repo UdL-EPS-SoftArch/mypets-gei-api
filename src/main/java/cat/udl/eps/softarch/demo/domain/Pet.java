@@ -14,6 +14,7 @@ public class Pet extends UriEntity<Long> {
     @GeneratedValue
     Long id;
 
+    
     String name;
     boolean isAdopted;
     String color;
