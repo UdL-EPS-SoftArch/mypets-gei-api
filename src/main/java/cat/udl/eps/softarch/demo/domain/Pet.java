@@ -11,6 +11,7 @@ import lombok.EqualsAndHashCode;
 public class Pet extends UriEntity<Long> {
     @Id
     @NotNull
+    @GeneratedValue
     Long id;
 
     String name;

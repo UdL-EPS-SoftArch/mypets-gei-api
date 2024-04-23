@@ -5,19 +5,19 @@ Feature: Modify Favourite
 
   Background:
     Given There is a registered user with username "testuser" and password "password" and email "user@sample.app"
-    Given There are two registered pets with ids "12345678" and "12345679"
+    Given There are two registered pets
 
 
   Scenario: Mark as favourite
     Given I login as "testuser" with password "password"
-    When I press the favouritePet button for the pet with id "12345678"
+    When I press the favouritePet button for the pet with id "1"
     Then The entry on the relation "favourites" is created
     And The response code is 201
 
   Scenario: Unmark as favourite
     Given I login as "testuser" with password "password"
-    Given User "testuser" has pet "12345679" set as favourite
-    When I press the favouritePet button for the pet with id "12345679"
+    Given User "testuser" has pet "2" set as favourite
+    When I press the favouritePet button for the pet with id "2"
     Then The response code is 200
     And The entry on the relation "favourites" is deleted
 

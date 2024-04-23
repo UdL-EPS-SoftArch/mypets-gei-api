@@ -29,19 +29,17 @@ public class modifyFavouriteStepDefs {
     @Autowired
     private StepDefs stepDefs;
     private Long petId;
+    private int petListSize;
 
-    @Given("^There are two registered pets with ids \"([^\"]*)\" and \"([^\"]*)\"$")
-    public void thereAreRegisteredPetsWithIds(Long petToCreate, Long petToFavourite) {
-        if (!petRepository.existsById(petToCreate)) {
-            Pet pet = new Pet();
-            pet.setId(petToCreate);
-            petRepository.save(pet);
-        }
-        if (!petRepository.existsById(petToFavourite)) {
-            Pet pet = new Pet();
-            pet.setId(petToFavourite);
-            petRepository.save(pet);
-        }
+    @Given("^There are two registered pets$")
+    public void thereAreRegisteredPets() {
+        Pet pet1 = new Pet();
+        //pet.setId(petToCreate);
+        petRepository.save(pet1);
+
+        Pet pet2 = new Pet();
+        //pet.setId(petToFavourite);
+        petRepository.save(pet2);
     }
 
     @Given("^User \"([^\"]*)\" has pet \"([^\"]*)\" set as favourite$")
@@ -65,10 +63,11 @@ public class modifyFavouriteStepDefs {
 
     @When("^I press the favouritePet button for the pet with id \"([^\"]*)\"$")
     public void iPressTheFavouriteButton(Long favouritedPet) throws Throwable {
+        List<FavouritedPets> petList = favouriteRepository.findByUserId(AuthenticationStepDefs.currentUsername);
         //Needed later for checking correct operation
+        petListSize = petList.size();
         petId = favouritedPet;
 
-        List<FavouritedPets> petList = favouriteRepository.findByUserId(AuthenticationStepDefs.currentUsername);
         boolean found = false;
 
         if (!petList.isEmpty()) {
@@ -99,12 +98,12 @@ public class modifyFavouriteStepDefs {
 
     @And("The entry on the relation \"favourites\" is created")
     public void theEntryIsCreated() {
-        Assert.assertTrue(favouritedByUser());
+        Assert.assertEquals(favouriteRepository.findByUserId(AuthenticationStepDefs.currentUsername).size(), (petListSize + 1));
     }
 
     @And("The entry on the relation \"favourites\" is deleted")
     public void theEntryIsDeleted() {
-        Assert.assertFalse(favouritedByUser());
+        Assert.assertEquals(favouriteRepository.findByUserId(AuthenticationStepDefs.currentUsername).size(), (petListSize - 1));
     }
 
     private boolean favouritedByUser() {
