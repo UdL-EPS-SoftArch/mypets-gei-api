@@ -36,6 +36,12 @@ public class ShelterVolunteerStepDefs {
             volunteer.setPassword(password);
             volunteer.encodePassword();
             shelterVolunteerRepository.save(volunteer);
+        } else {
+            shelterVolunteerRepository.findById(username).ifPresent(shelterVolunteer -> {
+                shelterVolunteer.setUserShelter(shelterRepository.findByName(shelterName).get(0));
+                shelterVolunteerRepository.save(shelterVolunteer);
+            });
+
         }
 
     }
