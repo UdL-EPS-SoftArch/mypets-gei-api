@@ -15,10 +15,7 @@ import io.cucumber.java.en.When;
 import org.json.JSONObject;
 import org.junit.Assert;
 import org.springframework.beans.factory.annotation.Autowired;
-
-import java.time.LocalDate;
 import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
@@ -89,10 +86,9 @@ public class ValidateShelterCertificateStepDefs {
         JSONObject jsonObject = new JSONObject(stepDefs.result.andReturn().getResponse().getContentAsString());
 
         String shelterCertificateUri = jsonObject.getString("uri");
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSSSSXXX");
-        LocalDate shelterCertificateExpirationDate = LocalDate.parse(jsonObject.getString("expirationDate"), formatter);
+        ZonedDateTime shelterCertificateExpirationDate = ZonedDateTime.parse(jsonObject.getString("expirationDate"));
 
-        boolean isShelterCertificateValid = shelterCertificateExpirationDate.isAfter(LocalDate.now());
+        boolean isShelterCertificateValid = shelterCertificateExpirationDate.isAfter(ZonedDateTime.now());
         if (!isShelterCertificateValid) {
             System.out.println("The Shelter Certificate IS not valid!" + stepDefs.result);
             Assert.fail("The Shelter Certificate IS not valid!");
