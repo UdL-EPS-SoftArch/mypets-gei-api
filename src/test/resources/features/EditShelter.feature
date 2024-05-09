@@ -6,7 +6,7 @@ Feature: Edit Shelter
   Background:
     Given There is a registered user with username "user" and password "existing" and email "user@sample.app"
     Given There is a registered already admin with username "admin" and password "admin" and email "admin@smaple.app"
-    Given There is a registered volunteer with username "volunteer" and password "volunteer"
+    Given There is a registered volunteer with username "volunteer" and password "password"
     And There is already a shelter with name "Shelter 1" email "shelter@sample.com" and mobile "999999999"
 
   Scenario: Edit shelter without being logged in
@@ -28,7 +28,7 @@ Feature: Edit Shelter
     Then The response code is 200
 
   Scenario: Edit shelter with volunteer
-    Given I login as "volunteer" with password "volunteer"
+    Given I login as "volunteer" with password "password"
     When I update the shelter with name "Shelter 1" to name "Another Shelter" email "shelter@sample.app" and mobile "123123123"
     And I get the shelter with name "Another Shelter"
     Then The response code is 200
