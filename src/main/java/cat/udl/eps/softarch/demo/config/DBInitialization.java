@@ -35,13 +35,13 @@ public class DBInitialization {
             user.encodePassword();
             userRepository.save(user);
         }
-        
+
         // Default ShelterVolunteer
         if (!shelterVolunteerRepository.existsById("volunteer")) {
             ShelterVolunteer volunteer = new ShelterVolunteer();
             volunteer.setEmail("volunteer@sample.app");
             volunteer.setId("volunteer");
-            volunteer.setPassword("test1234");
+            volunteer.setPassword(defaultPassword);
             volunteer.encodePassword();
             shelterVolunteerRepository.save(volunteer);
         }
