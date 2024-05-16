@@ -5,10 +5,10 @@ Feature: Add Shelter Certificate
 
   Background: Exists a shelter with name "test" and a shelter volunteer
     Given A shelter with name "test"
-    And There is a registered user with username "volunteer" and password "123456789" and email "volunteer@mypets.com"
+    And There is a registered user with username "volunteer" and password "password" and email "volunteer@mypets.com"
 
     Scenario: Adding a Shelter Certificate as a Shelter Volunteer
-        Given I can login with username "volunteer" and password "123456789"
+        Given I can login with username "volunteer" and password "password"
         When I add a Shelter Certificate with valid expiration date to the shelter with name "test"
         Then The response code is 201
 

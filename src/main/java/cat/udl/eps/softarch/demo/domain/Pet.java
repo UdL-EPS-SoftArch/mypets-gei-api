@@ -10,8 +10,7 @@ import lombok.EqualsAndHashCode;
 @Data
 public class Pet extends UriEntity<Long> {
     @Id
-    @NotNull
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
 
     
@@ -23,7 +22,7 @@ public class Pet extends UriEntity<Long> {
     String age;
     String description;
     String breed;
-
+    String img;
 
     @ManyToOne
     public Shelter isIn;
