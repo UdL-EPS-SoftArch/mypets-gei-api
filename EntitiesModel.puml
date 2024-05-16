@@ -30,7 +30,7 @@ class Pet {
   age: String
   description: String
   breed: String
-
+  img: String
 }
 
 class Shelter {
