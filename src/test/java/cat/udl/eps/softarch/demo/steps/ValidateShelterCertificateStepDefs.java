@@ -52,16 +52,6 @@ public class ValidateShelterCertificateStepDefs {
         }
     }
 
-    @And("^An admin with username \"([^\"]*)\" and password \"([^\"]*)\"$")
-    public void anAdminWithUsername(String username, String password){
-        Admin admin = new Admin();
-        admin.setId(username);
-        admin.setEmail("admin@admin.com");
-        admin.setPassword(password);
-        admin.encodePassword();
-        adminRepository.save(admin);
-    }
-
     @Given("^a shelter certificate associated with a shelter with name \"([^\"]*)\" with valid information created by a shelter volunteer$")
     public void aShelterCertificateWithValidInformationSentByAVolunteer(String name){
         Shelter shelter = shelterRepository.findByName(name).get(0);

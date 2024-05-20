@@ -1,7 +1,9 @@
 package cat.udl.eps.softarch.demo.config;
 
+import cat.udl.eps.softarch.demo.domain.Admin;
 import cat.udl.eps.softarch.demo.domain.ShelterVolunteer;
 import cat.udl.eps.softarch.demo.domain.User;
+import cat.udl.eps.softarch.demo.repository.AdminRepository;
 import cat.udl.eps.softarch.demo.repository.UserRepository;
 import cat.udl.eps.softarch.demo.repository.ShelterVolunteerRepository;
 import org.springframework.beans.factory.annotation.Value;
@@ -17,10 +19,14 @@ public class DBInitialization {
     @Value("${spring.profiles.active:}")
     private String activeProfiles;
     private final UserRepository userRepository;
+    private final AdminRepository adminRepository;
     private final ShelterVolunteerRepository shelterVolunteerRepository;
 
-    public DBInitialization(UserRepository userRepository, ShelterVolunteerRepository shelterVolunteerRepository) {
+    public DBInitialization(UserRepository userRepository,
+                            AdminRepository adminRepository,
+                            ShelterVolunteerRepository shelterVolunteerRepository) {
         this.userRepository = userRepository;
+        this.adminRepository = adminRepository;
         this.shelterVolunteerRepository = shelterVolunteerRepository;
     }
 
@@ -34,6 +40,16 @@ public class DBInitialization {
             user.setPassword(defaultPassword);
             user.encodePassword();
             userRepository.save(user);
+        }
+
+        // Default admin
+        if (!adminRepository.existsById("admin")) {
+            Admin admin = new Admin();
+            admin.setEmail("admin@sample.app");
+            admin.setId("admin");
+            admin.setPassword(defaultPassword);
+            admin.encodePassword();
+            userRepository.save(admin);
         }
 
         // Default ShelterVolunteer

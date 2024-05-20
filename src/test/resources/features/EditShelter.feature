@@ -5,7 +5,7 @@ Feature: Edit Shelter
 
   Background:
     Given There is a registered user with username "user" and password "existing" and email "user@sample.app"
-    Given There is a registered already admin with username "admin" and password "admin" and email "admin@smaple.app"
+    Given There is a registered already admin with username "admin" and password "password" and email "admin@smaple.app"
     Given There is a registered volunteer with username "volunteer" and password "password"
     And There is already a shelter with name "Shelter 1" email "shelter@sample.com" and mobile "999999999"
 
@@ -22,7 +22,7 @@ Feature: Edit Shelter
     And The error message is "Unauthorized"
 
   Scenario: Edit shelter with admin
-    Given I login as "admin" with password "admin"
+    Given I login as "admin" with password "password"
     When I update the shelter with name "Shelter 1" to name "Another Shelter" email "shelter@sample.app" and mobile "123123123"
     And I get the shelter with name "Another Shelter"
     Then The response code is 200
@@ -34,19 +34,19 @@ Feature: Edit Shelter
     Then The response code is 200
 
   Scenario: Edit shelter with missing new name
-    Given I login as "admin" with password "admin"
+    Given I login as "admin" with password "password"
     When I update the shelter with name "Shelter 1" to name "" email "shelter@sample.app" and mobile "123123123"
     Then The response code is 400
     And The error message is "must not be blank"
 
   Scenario: Edit shelter with missing new email
-    Given I login as "admin" with password "admin"
+    Given I login as "admin" with password "password"
     When I update the shelter with name "Shelter 1" to name "Another Shelter" email "" and mobile "123123123"
     Then The response code is 400
     And The error message is "must not be blank"
 
   Scenario: Edit shelter with missing new mobile
-    Given I login as "admin" with password "admin"
+    Given I login as "admin" with password "password"
     When I update the shelter with name "Shelter 1" to name "Another Shelter" email "shelter@sample.app" and mobile ""
     Then The response code is 400
     And The error message is "must not be blank"
