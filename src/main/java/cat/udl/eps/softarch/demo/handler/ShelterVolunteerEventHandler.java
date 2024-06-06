@@ -2,6 +2,7 @@ package cat.udl.eps.softarch.demo.handler;
 import cat.udl.eps.softarch.demo.domain.Shelter;
 import cat.udl.eps.softarch.demo.domain.ShelterVolunteer;
 import cat.udl.eps.softarch.demo.domain.User;
+import cat.udl.eps.softarch.demo.exceptions.VolunteerCannotKickHimself;
 import cat.udl.eps.softarch.demo.exceptions.VolunteerFromDifferentShelter;
 import cat.udl.eps.softarch.demo.repository.ShelterVolunteerRepository;
 import cat.udl.eps.softarch.demo.repository.UserRepository;
@@ -29,12 +30,14 @@ public class ShelterVolunteerEventHandler {
     }
 
     @HandleBeforeDelete
-    public void handleShelterVolunteerBeforeDelete(ShelterVolunteer volunteer) {
+        public void handleShelterVolunteerBeforeDelete(ShelterVolunteer volunteer) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String username = authentication.getName();
         ShelterVolunteer requestVolunteer = shelterVolunteerRepository.findById(username).orElse(null);
-        if(requestVolunteer!=null && Objects.equals(requestVolunteer.getUserShelter().getId(), volunteer.getUserShelter().getId())) {
-            logger.info("Volunteer {} is deleting volunteer {}.", username, volunteer.getUsername());
+        if(requestVolunteer!=null && Objects.equals(requestVolunteer.getUserShelter().getId(), volunteer.getUserShelter().getId()) ) {
+            if(!username.equals(volunteer.getUsername()))
+                logger.info("Volunteer {} is deleting volunteer {}.", username, volunteer.getUsername());
+            else throw new VolunteerCannotKickHimself();
         }
         else throw new VolunteerFromDifferentShelter();
 
