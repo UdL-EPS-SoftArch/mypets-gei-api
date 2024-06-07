@@ -69,7 +69,7 @@ public class DBInitialization {
             Shelter shelter = new Shelter();
             shelter.setName("shelter");
             shelter.setEmail("shelter@sample.app");
-            shelter.setMobile("999999990");
+            shelter.setMobile("420420420");
             shelter.setActive(true);
             shelterRepository.save(shelter);
         }
@@ -77,7 +77,7 @@ public class DBInitialization {
             Shelter shelter = new Shelter();
             shelter.setName("shelter1");
             shelter.setEmail("shelter1@sample.app");
-            shelter.setMobile("999999999");
+            shelter.setMobile("420420421");
             shelter.setActive(true);
             shelterRepository.save(shelter);
 
