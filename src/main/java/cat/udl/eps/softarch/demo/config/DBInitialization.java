@@ -81,38 +81,53 @@ public class DBInitialization {
             shelter.setActive(true);
             shelterRepository.save(shelter);
 
-        if (!shelterVolunteerRepository.existsById("volunteer")) {
-            ShelterVolunteer volunteer = new ShelterVolunteer();
-            volunteer.setEmail("volunteer@dbsample.app");
-            volunteer.setId("volunteer");
-            volunteer.setPassword(defaultPassword);
-            volunteer.encodePassword();
-            volunteer.setUserShelter(shelter);
-            shelterVolunteerRepository.save(volunteer);
-        }
-        if (!shelterVolunteerRepository.existsById("volunteer1")) {
-            ShelterVolunteer volunteer = new ShelterVolunteer();
-            volunteer.setEmail("volunteer1@dbsample.app");
-            volunteer.setId("volunteer1");
-            volunteer.setPassword(defaultPassword);
-            volunteer.setUserShelter(shelter);
-            volunteer.encodePassword();
-            shelterVolunteerRepository.save(volunteer);
-        }
 
-        if (!shelterVolunteerRepository.existsById("volunteer2")) {
-            ShelterVolunteer volunteer = new ShelterVolunteer();
-            volunteer.setEmail("volunteer2@dbsample.app");
-            volunteer.setId("volunteer2");
-            volunteer.setPassword(defaultPassword);
-            volunteer.setUserShelter(shelter);
-            volunteer.encodePassword();
-            shelterVolunteerRepository.save(volunteer);
+            if (!shelterVolunteerRepository.existsById("volunteer")) {
+                ShelterVolunteer volunteer = new ShelterVolunteer();
+                volunteer.setEmail("volunteer@dbsample.app");
+                volunteer.setId("volunteer");
+                volunteer.setPassword(defaultPassword);
+                volunteer.encodePassword();
+                volunteer.setUserShelter(shelter);
+                shelterVolunteerRepository.save(volunteer);
+            }
+            if (!shelterVolunteerRepository.existsById("volunteer1")) {
+                ShelterVolunteer volunteer = new ShelterVolunteer();
+                volunteer.setEmail("volunteer1@dbsample.app");
+                volunteer.setId("volunteer1");
+                volunteer.setPassword(defaultPassword);
+                volunteer.setUserShelter(shelter);
+                volunteer.encodePassword();
+                shelterVolunteerRepository.save(volunteer);
+            }
+
+            if (!shelterVolunteerRepository.existsById("volunteer2")) {
+                ShelterVolunteer volunteer = new ShelterVolunteer();
+                volunteer.setEmail("volunteer2@dbsample.app");
+                volunteer.setId("volunteer2");
+                volunteer.setPassword(defaultPassword);
+                volunteer.setUserShelter(shelter);
+                volunteer.encodePassword();
+                shelterVolunteerRepository.save(volunteer);
+            }
         }
-
-
+        if(shelterRepository.findByEmail("shelter2@dbsample.app").isEmpty()) {
+            Shelter shelter = new Shelter();
+            shelter.setName("shelter2");
+            shelter.setEmail("shelter2@dbsample.app");
+            shelter.setMobile("420420422");
+            shelter.setActive(true);
+            shelterRepository.save(shelter);
+            if (!shelterVolunteerRepository.existsById("volunteer3")) {
+                ShelterVolunteer volunteer = new ShelterVolunteer();
+                volunteer.setEmail("volunteer3@dbsample.app");
+                volunteer.setId("volunteer3");
+                volunteer.setPassword(defaultPassword);
+                volunteer.setUserShelter(shelter);
+                volunteer.encodePassword();
+                shelterVolunteerRepository.save(volunteer);
+            }
         }
-
 
         if (Arrays.asList(activeProfiles.split(",")).contains("test")) {
             // Testing instances

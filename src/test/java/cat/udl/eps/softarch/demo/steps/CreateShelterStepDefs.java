@@ -78,7 +78,8 @@ public class CreateShelterStepDefs {
             sheltersCreatedNum++;
         if(!shelterRepository.findByEmail("shelter1@dbsample.app").isEmpty())
             sheltersCreatedNum++;
-
+        if(!shelterRepository.findByEmail("shelter2@dbsample.app").isEmpty())
+            sheltersCreatedNum++;
         Assert.assertEquals("Shelters created", sheltersCreatedNum, shelterRepository.count());
     }
 
