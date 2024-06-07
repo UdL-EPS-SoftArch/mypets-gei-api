@@ -65,25 +65,25 @@ public class DBInitialization {
         }
 
         // Default ShelterVolunteer
-        if(shelterRepository.findByEmail("shelter@sample.app").isEmpty()) {
+        if(shelterRepository.findByEmail("shelter@dbsample.app").isEmpty()) {
             Shelter shelter = new Shelter();
             shelter.setName("shelter");
-            shelter.setEmail("shelter@sample.app");
+            shelter.setEmail("shelter@dbsample.app");
             shelter.setMobile("420420420");
             shelter.setActive(true);
             shelterRepository.save(shelter);
         }
-        if(shelterRepository.findByEmail("shelter1@sample.app").isEmpty()) {
+        if(shelterRepository.findByEmail("shelter1@dbsample.app").isEmpty()) {
             Shelter shelter = new Shelter();
             shelter.setName("shelter1");
-            shelter.setEmail("shelter1@sample.app");
+            shelter.setEmail("shelter1@dbsample.app");
             shelter.setMobile("420420421");
             shelter.setActive(true);
             shelterRepository.save(shelter);
 
         if (!shelterVolunteerRepository.existsById("volunteer")) {
             ShelterVolunteer volunteer = new ShelterVolunteer();
-            volunteer.setEmail("volunteer@sample.app");
+            volunteer.setEmail("volunteer@dbsample.app");
             volunteer.setId("volunteer");
             volunteer.setPassword(defaultPassword);
             volunteer.encodePassword();
@@ -92,7 +92,7 @@ public class DBInitialization {
         }
         if (!shelterVolunteerRepository.existsById("volunteer1")) {
             ShelterVolunteer volunteer = new ShelterVolunteer();
-            volunteer.setEmail("volunteer1@sample.app");
+            volunteer.setEmail("volunteer1@dbsample.app");
             volunteer.setId("volunteer1");
             volunteer.setPassword(defaultPassword);
             volunteer.setUserShelter(shelter);
@@ -102,7 +102,7 @@ public class DBInitialization {
 
         if (!shelterVolunteerRepository.existsById("volunteer2")) {
             ShelterVolunteer volunteer = new ShelterVolunteer();
-            volunteer.setEmail("volunteer2@sample.app");
+            volunteer.setEmail("volunteer2@dbsample.app");
             volunteer.setId("volunteer2");
             volunteer.setPassword(defaultPassword);
             volunteer.setUserShelter(shelter);

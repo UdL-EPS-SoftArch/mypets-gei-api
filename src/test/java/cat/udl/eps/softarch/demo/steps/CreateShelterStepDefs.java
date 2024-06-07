@@ -73,6 +73,12 @@ public class CreateShelterStepDefs {
 
     @And("^There is (\\d+) Shelter created$")
     public void thereIsShelterCreated(int sheltersCreatedNum) {
+        //Adding the dbInit shelters
+        if(!shelterRepository.findByEmail("shelter@dbsample.app").isEmpty())
+            sheltersCreatedNum++;
+        if(!shelterRepository.findByEmail("shelter1@dbsample.app").isEmpty())
+            sheltersCreatedNum++;
+
         Assert.assertEquals("Shelters created", sheltersCreatedNum, shelterRepository.count());
     }
 
