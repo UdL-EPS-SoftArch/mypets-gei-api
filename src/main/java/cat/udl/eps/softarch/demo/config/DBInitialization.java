@@ -1,13 +1,7 @@
 package cat.udl.eps.softarch.demo.config;
 
-import cat.udl.eps.softarch.demo.domain.Admin;
-import cat.udl.eps.softarch.demo.domain.Shelter;
-import cat.udl.eps.softarch.demo.domain.ShelterVolunteer;
-import cat.udl.eps.softarch.demo.domain.User;
-import cat.udl.eps.softarch.demo.repository.AdminRepository;
-import cat.udl.eps.softarch.demo.repository.ShelterRepository;
-import cat.udl.eps.softarch.demo.repository.UserRepository;
-import cat.udl.eps.softarch.demo.repository.ShelterVolunteerRepository;
+import cat.udl.eps.softarch.demo.domain.*;
+import cat.udl.eps.softarch.demo.repository.*;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 
@@ -24,14 +18,20 @@ public class DBInitialization {
     private final AdminRepository adminRepository;
     private final ShelterVolunteerRepository shelterVolunteerRepository;
     private final ShelterRepository shelterRepository;
+    private final PetRepository petRepository;
+    private final FavouritedPetsRepository favouritedPetsRepository;
     public DBInitialization(UserRepository userRepository,
                             AdminRepository adminRepository,
                             ShelterVolunteerRepository shelterVolunteerRepository,
-                            ShelterRepository shelterRepository) {
+                            ShelterRepository shelterRepository,
+                            PetRepository petRepository,
+                            FavouritedPetsRepository favouritedPetsRepository) {
         this.userRepository = userRepository;
         this.adminRepository = adminRepository;
         this.shelterVolunteerRepository = shelterVolunteerRepository;
         this.shelterRepository = shelterRepository;
+        this.petRepository = petRepository;
+        this.favouritedPetsRepository = favouritedPetsRepository;
     }
 
     @PostConstruct
@@ -139,6 +139,48 @@ public class DBInitialization {
                 user.encodePassword();
                 userRepository.save(user);
             }
+        }
+
+        // User for favouriteButton tests
+        if (!userRepository.existsById("userFavourite")) {
+            User user = new User();
+            user.setEmail("userFavourite@sample.app");
+            user.setId("userFavourite");
+            user.setPassword(defaultPassword);
+            user.encodePassword();
+            userRepository.save(user);
+        }
+        // Pets for favouriteButton tests
+        if (!petRepository.existsById(1L)) {
+            Pet pet = new Pet();
+            pet.setName("Rex");
+            pet.setColor("Black/White");
+            pet.setSize("Big");
+            pet.setWeight(15D);
+            pet.setAge("4 years old");
+            pet.setDescription("Very active");
+            pet.setBreed("Dalmatian");
+            pet.setImg("https://www.webconsultas.com/sites/default/files/styles/wc_adaptive_image__small/public/temas/caracteristicas_dalmata.jpg");
+            petRepository.save(pet);
+        }
+        if (!petRepository.existsById(2L)) {
+            Pet pet = new Pet();
+            pet.setName("Max");
+            pet.setColor("Brown/Black");
+            pet.setSize("Big");
+            pet.setWeight(12D);
+            pet.setAge("10 years old");
+            pet.setDescription("Likes to relax and cuddle");
+            pet.setBreed("German Shepherd");
+            pet.setImg("https://www.aon.es/personales/seguro-perro-gato/wp-content/uploads/sites/2/2021/06/pastor-aleman-3.jpg");
+            petRepository.save(pet);
+        }
+        //One of them favourited to test functionality
+        if(!favouritedPetsRepository.existsById(1L)){
+            FavouritedPets favPets = new FavouritedPets();
+            favPets.setUserId("userFavourite");
+            favPets.setPetId(1L);
+            favouritedPetsRepository.save(favPets);
         }
     }
 }
