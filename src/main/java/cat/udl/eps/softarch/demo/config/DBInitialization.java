@@ -175,6 +175,18 @@ public class DBInitialization {
             pet.setImg("https://www.aon.es/personales/seguro-perro-gato/wp-content/uploads/sites/2/2021/06/pastor-aleman-3.jpg");
             petRepository.save(pet);
         }
+        if (!petRepository.existsById(3L)) {
+            Pet pet = new Pet();
+            pet.setName("Fifi");
+            pet.setColor("White");
+            pet.setSize("Small");
+            pet.setWeight(12D);
+            pet.setAge("3 years old");
+            pet.setDescription("Likes to relax and cuddle");
+            pet.setBreed("Croatishe pupi");
+            pet.setImg("https://hips.hearstapps.com/hmg-prod/images/bichon-frise-1660897169.jpg?crop=0.6666666666666666xw:1xh;center,top&resize=980:*");
+            petRepository.save(pet);
+        }
         //One of them favourited to test functionality
         if(!favouritedPetsRepository.existsById(1L)){
             FavouritedPets favPets = new FavouritedPets();
